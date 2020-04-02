@@ -66,7 +66,7 @@ stages:
           vmImage: ubuntu-18.04
         steps:
           - task: DockerCompose@0
-            displayName: Compose
+            displayName: Docker Compose
             inputs:
               action: Run a Docker Compose command
               azureSubscriptionEndpoint: azure-resources
@@ -77,6 +77,21 @@ stages:
               qualifyImageNames: true
               buildImages: true
               detached: true
+          # - task: AzureWebAppContainer@1
+          #   displayName: Web App Container
+          #   inputs:
+          #     azureSubscription: tylercadena(740adccb-1991-4b18-b49f-d6bdc684c399)
+          #     resourceGroupName: tylergroup
+          #     containers: bookmarkregistry.azurecr.io/
+          #     appName: bookmark-nodb
+          #     slotName: staging
+          #     deployToSlotOrASE: true
+          # - task: AzureAppServiceManage@0
+          #   displayName: Service Manager
+          #   inputs:
+          #     azureSubscription: tylercadena(740adccb-1991-4b18-b49f-d6bdc684c399)
+          #     ResourceGroupName: tylergroup
+          #     SwapWithProduction: true
 
 trigger:
   - synaodev

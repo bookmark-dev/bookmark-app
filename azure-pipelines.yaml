@@ -1,7 +1,9 @@
 pr:
   - synaodev
 
+
 name: $(date:yyyyMMdd)$(rev:.rr)
+
 
 stages:
   - stage: build

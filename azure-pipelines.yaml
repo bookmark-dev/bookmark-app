@@ -70,7 +70,7 @@ stages:
               azureSubscriptionEndpoint: azure-resources
               azureContainerRegistry: bookmarkregistry.azurecr.io
               dockerComposeFile: docker-compose.yaml
-              dockerComposeCommand: up -d
+              # dockerComposeCommand: up -d
               projectName: bookmark
               qualifyImageNames: true
               buildImages: true

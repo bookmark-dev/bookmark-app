@@ -64,9 +64,9 @@ stages:
           vmImage: ubuntu-18.04
         steps:
           - task: DockerCompose@0
-            displayName: Run services
+            displayName: Compose
             inputs:
-              action: Run services
+              action: Run a Docker Compose command
               azureSubscriptionEndpoint: azure-resources
               azureContainerRegistry: bookmarkregistry.azurecr.io
               dockerComposeFile: docker-compose.yaml

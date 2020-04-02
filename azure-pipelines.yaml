@@ -67,21 +67,14 @@ stages:
             displayName: Run services
             inputs:
               action: Run services
-              azureContainerRegistry: bookmarkregistry
-              azureSubscriptionEndpoint: tylercadena(740adccb-1991-4b18-b49f-d6bdc684c399)
-              containerRegistryType: Container Registry
+              azureSubscriptionEndpoint: azure-resources
+              azureContainerRegistry: bookmarkregistry.azurecr.io
               dockerComposeFile: docker-compose.yaml
+              dockerComposeCommand: up -d
               projectName: bookmark
-              buildImages: false
-              detached: false
-          # - task: AzureRmWebAppDeployment@4
-          #   inputs:
-          #     ConnectionType: AzureRM
-          #     azureSubscription: tylercadena(740adccb-1991-4b18-b49f-d6bdc684c399)
-          #     appType: webAppContainer
-          #     WebAppName: bookmark
-          #     DockerNamespace: synaodev
-          #     DockerRepository: bookmark
+              qualifyImageNames: true
+              buildImages: true
+              detached: true
 
 trigger:
   - synaodev

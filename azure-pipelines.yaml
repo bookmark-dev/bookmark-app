@@ -1,0 +1,87 @@
+pr:
+  - master
+
+name: $(date:yyyyMMdd)$(rev:.rr)
+
+stages:
+  - stage: build
+    jobs:
+      - job: run_build
+        steps:
+          - script: dotnet build
+  - stage: test
+    jobs:
+      - job: run_tests
+        steps:
+          - script: dotnet test
+  - stage: analyze
+    jobs:
+      - job: run_analysis
+        pool:
+          vmImage: ubuntu-18.04
+        steps:
+          - task: DotnetGlobalToolInstaller@0
+            inputs:
+              name: "dotnet-sonarscanner"
+          - script: |
+              dotnet sonarscanner begin /k:"bookmark" /o:"bookmark-dev" /d:sonar.login=$SONAR_TOKEN /d:sonar.host.url="https://sonarcloud.io/"
+              dotnet build
+              dotnet sonarscanner end /d:sonar.login=$SONAR_TOKEN
+            env:
+              SONAR_TOKEN: $(SonarToken)
+  - stage: pack
+    jobs:
+      - job: pack_client
+        steps:
+          - task: Docker@2
+            inputs:
+              command: login
+              containerRegistry: docker
+          - script: |
+              docker image build --file client.dockerfile --tag synaodev/bookmark-client .
+              docker image push synaodev/bookmark-client
+          - task: Docker@2
+            inputs:
+              command: logout
+              containerRegistry: docker
+      - job: pack_restapi
+        steps:
+          - task: Docker@2
+            inputs:
+              command: login
+              containerRegistry: docker
+          - script: |
+              docker image build --file restapi.dockerfile --tag synaodev/bookmark-restapi .
+              docker image push synaodev/bookmark-restapi
+          - task: Docker@2
+            inputs:
+              command: logout
+              containerRegistry: docker
+  - stage: deploy
+    jobs:
+      - job:
+        pool:
+          vmImage: ubuntu-18.04
+        steps:
+          - task: DockerCompose@0
+            displayName: Run services
+            inputs:
+              action: Run services
+              azureContainerRegistry: bookmarkregistry
+              azureSubscriptionEndpoint: tylercadena(740adccb-1991-4b18-b49f-d6bdc684c399)
+              containerRegistryType: Container Registry
+              dockerComposeFile: docker-compose.yaml
+              projectName: bookmark
+              buildImages: false
+              detached: false
+          # - task: AzureRmWebAppDeployment@4
+          #   inputs:
+          #     ConnectionType: AzureRM
+          #     azureSubscription: tylercadena(740adccb-1991-4b18-b49f-d6bdc684c399)
+          #     appType: webAppContainer
+          #     WebAppName: bookmark
+          #     DockerNamespace: synaodev
+          #     DockerRepository: bookmark
+
+trigger:
+  - master

@@ -1,0 +1,13 @@
+@model BookMark.Client.Models.UserViewModel
+
+<form action="/user/login" method="POST">
+	@Html.AntiForgeryToken()
+	<label asp-for="@Model.Name">Username</label>
+	<input type="text" asp-for="@Model.Name">
+	@Html.ValidationMessageFor(uvm => uvm.Name)
+
+	<label asp-for="@Model.Password">Password</label>
+	<input type="password" asp-for="@Model.Password">
+	@Html.ValidationMessageFor(uvm => uvm.Password)
+	<button type="submit">Login</button>
+</form>

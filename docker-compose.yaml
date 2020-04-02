@@ -1,0 +1,55 @@
+version: "3.7"
+
+networks:
+  skynet:
+
+services:
+#   database:
+#     container_name: ormdata
+#     image: mcr.microsoft.com/mssql/server:2017-latest
+#     environment: 
+#       ACCEPT_EULA: "y"
+#       SA_PASSWORD: "Password12345"
+#     build: .
+#     expose: 
+#       - 1433
+#     ports: 
+#       - 1433:1433
+#     networks: 
+#       - skynet
+  restapi:
+    container_name: restapi
+    # depends_on: 
+    #   - database
+    image: synaodev/bookmark-restapi
+    environment: 
+      RestApiUrl: "http://restapi"
+    build: 
+      context: .
+      dockerfile: restapi.dockerfile
+    expose:
+      - 5000
+    ports:
+      - 5000:80
+    networks:
+      - skynet
+    # links: 
+    #   - database
+    restart: always
+  client:
+    container_name: client
+    depends_on: 
+      # - database
+      - restapi
+    image: synaodev/bookmark-client
+    environment: 
+      RestApiUrl: "http://restapi"
+    build: 
+      context: .
+      dockerfile: client.dockerfile
+    ports:
+      - 8000:80
+    networks:
+      - skynet
+    links:
+	  - restapi

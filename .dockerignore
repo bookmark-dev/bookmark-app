@@ -1,0 +1,7 @@
+## dotnet
+**/.vscode/
+**/obj/
+**/bin/
+
+## nodejs
+**/node_modules/

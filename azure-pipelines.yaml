@@ -1,9 +1,10 @@
+name: $(date:yyyyMMdd)$(rev:.rr)
+
 pr:
   - synaodev
 
-
-name: $(date:yyyyMMdd)$(rev:.rr)
-
+trigger:
+- synaodev
 
 stages:
   - stage: build
@@ -26,7 +27,7 @@ stages:
             inputs:
               name: "dotnet-sonarscanner"
           - script: |
-              dotnet sonarscanner begin /k:"bookmark" /o:"bookmark-dev" /d:sonar.login=$SONAR_TOKEN /d:sonar.host.url="https://sonarcloud.io/"
+              dotnet sonarscanner begin /k:"bookmark-app" /o:"bookmark-dev" /d:sonar.login=$SONAR_TOKEN /d:sonar.host.url="https://sonarcloud.io/"
               dotnet build
               dotnet sonarscanner end /d:sonar.login=$SONAR_TOKEN
             env:
@@ -59,9 +60,22 @@ stages:
             inputs:
               command: logout
               containerRegistry: docker
+      - job: pack_ormdata
+        steps:
+          - task: Docker@2
+            inputs:
+              command: login
+              containerRegistry: docker
+          - script: |
+              docker image build --file ormdata.dockerfile --tag synaodev/bookmark-ormdata .
+              docker image push synaodev/bookmark-ormdata
+          - task: Docker@2
+            inputs:
+              command: logout
+              containerRegistry: docker
   - stage: deploy
     jobs:
-      - job:
+      - job: deploy_app
         pool:
           vmImage: ubuntu-18.04
         steps:
@@ -70,28 +84,28 @@ stages:
             inputs:
               action: Run a Docker Compose command
               azureSubscriptionEndpoint: azure-resources
-              azureContainerRegistry: bookmarkregistry.azurecr.io
+              azureContainerRegistry: $(AzureContainerRegistry)
               dockerComposeFile: docker-compose.yaml
               dockerComposeCommand: up -d
-              projectName: bookmark
+              projectName: bookmark-app
               qualifyImageNames: true
               buildImages: true
               detached: true
-          # - task: AzureWebAppContainer@1
-          #   displayName: Web App Container
-          #   inputs:
-          #     azureSubscription: tylercadena(740adccb-1991-4b18-b49f-d6bdc684c399)
-          #     resourceGroupName: tylergroup
-          #     containers: bookmarkregistry.azurecr.io/
-          #     appName: bookmark-nodb
-          #     slotName: staging
-          #     deployToSlotOrASE: true
-          # - task: AzureAppServiceManage@0
-          #   displayName: Service Manager
-          #   inputs:
-          #     azureSubscription: tylercadena(740adccb-1991-4b18-b49f-d6bdc684c399)
-          #     ResourceGroupName: tylergroup
-          #     SwapWithProduction: true
-
-trigger:
-  - synaodev
+          - task: AzureWebAppContainer@1
+            displayName: Web App Container
+            inputs:
+              azureSubscription: $(AzureSubscriptionEndpoint)
+              resourceGroupName: $(AzureResourceGroup)
+              containers: $(AzureContainerRegistry)/bookmark-app:latest
+              appName: bookmark-app
+              slotName: staging
+              deployToSlotOrASE: true
+          - task: AzureAppServiceManage@0
+            displayName: Service Manager
+            inputs:
+              Action: Start Azure App Service
+              azureSubscription: $(AzureSubscriptionEndpoint)
+              ResourceGroupName: $(AzureResourceGroup)
+              SwapWithProduction: true
+              WebAppName: bookmark-app
+              SourceSlot: staging

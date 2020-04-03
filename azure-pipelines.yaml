@@ -39,60 +39,63 @@ stages:
           - task: Docker@2
             inputs:
               command: login
-              containerRegistry: docker
+              arguments: --username $(AzureContainerUsername) --password $(AzureContainerPassword)
+              containerRegistry: $(AzureContainerRegistry)
           - script: |
-              docker image build --file client.dockerfile --tag synaodev/bookmark-client .
-              docker image push synaodev/bookmark-client
+              docker image build --file client.dockerfile --tag $(AzureContainerRegistry)/bookmark-client .
+              docker image push $(AzureContainerRegistry)/bookmark-client
           - task: Docker@2
             inputs:
               command: logout
-              containerRegistry: docker
+              containerRegistry: $(AzureContainerRegistry)
       - job: pack_restapi
         steps:
           - task: Docker@2
             inputs:
               command: login
-              containerRegistry: docker
+              arguments: --username $(AzureContainerUsername) --password $(AzureContainerPassword)
+              containerRegistry: $(AzureContainerRegistry)
           - script: |
-              docker image build --file restapi.dockerfile --tag synaodev/bookmark-restapi .
-              docker image push synaodev/bookmark-restapi
+              docker image build --file restapi.dockerfile --tag $(AzureContainerRegistry)/bookmark-restapi .
+              docker image push $(AzureContainerRegistry)/bookmark-restapi
           - task: Docker@2
             inputs:
               command: logout
-              containerRegistry: docker
+              containerRegistry: $(AzureContainerRegistry)
       - job: pack_ormdata
         steps:
           - task: Docker@2
             inputs:
               command: login
-              containerRegistry: docker
+              arguments: --username $(AzureContainerUsername) --password $(AzureContainerPassword)
+              containerRegistry: $(AzureContainerRegistry)
           - script: |
-              docker image build --file ormdata.dockerfile --tag synaodev/bookmark-ormdata .
-              docker image push synaodev/bookmark-ormdata
+              docker image build --file ormdata.dockerfile --tag $(AzureContainerRegistry)/bookmark-ormdata .
+              docker image push $(AzureContainerRegistry)/bookmark-ormdata
           - task: Docker@2
             inputs:
               command: logout
-              containerRegistry: docker
+              containerRegistry: $(AzureContainerRegistry)
   - stage: deploy
     jobs:
-      - job: compose_app
-        pool:
-          vmImage: ubuntu-18.04
-        steps:
-          - task: DockerCompose@0
-            displayName: Docker Compose
-            inputs:
-              action: Run a Docker Compose command
-              containerregistrytype: Azure Container Registry
-              azureSubscriptionEndpoint: $(AzureSubscriptionEndpoint)
-              azureContainerRegistry: $(AzureContainerRegistry)
-              dockerComposeFile: docker-compose.yaml
-              dockerComposeCommand: up -d
-              projectName: bookmark-webapp
-              containerName: bookmark-webapp
-              qualifyImageNames: true
-              buildImages: true
-              detached: true
+      # - job: compose_app
+      #   pool:
+      #     vmImage: ubuntu-18.04
+      #   steps:
+      #     - task: DockerCompose@0
+      #       displayName: Docker Compose
+      #       inputs:
+      #         action: Run a Docker Compose command
+      #         containerregistrytype: Azure Container Registry
+      #         azureSubscriptionEndpoint: $(AzureSubscriptionEndpoint)
+      #         azureContainerRegistry: $(AzureContainerRegistry)
+      #         dockerComposeFile: docker-compose.yaml
+      #         dockerComposeCommand: up -d
+      #         projectName: bookmark-webapp
+      #         containerName: bookmark-webapp
+      #         qualifyImageNames: true
+      #         buildImages: true
+      #         detached: true
       - job: deploy_app
         pool:
           vmImage: ubuntu-18.04
@@ -103,8 +106,8 @@ stages:
               appName: bookmark-webapp
               azureSubscription: azure
               resourceGroupName: $(AzureResourceGroup)
-              multicontainerConfigFile: docker-compose.yaml
-              deployToSlotOrASE: true
+              multicontainerConfigFile: docker-compose.azure.yaml
+              # deployToSlotOrASE: true
               # slotName: staging
       # - job: manage_app
       #   pool:

@@ -93,3 +93,29 @@ stages:
               qualifyImageNames: true
               buildImages: true
               detached: true
+      - job: deploy_app
+        pool:
+          vmImage: ubuntu-18.04
+        steps:
+          - task: AzureWebAppContainer@1
+            displayName: Web App Container
+            inputs:
+              appName: bookmark-webapp
+              azureSubscription: $(AzureSubscriptionEndpoint)
+              resourceGroupName: $(AzureResourceGroup)
+              multicontainerConfigFile: docker-compose.yaml
+              deployToSlotOrASE: true
+              slotName: staging
+      - job: manage_app
+        pool:
+          vmImage: ubuntu-18.04
+        steps:
+          - task: AzureAppServiceManage@0
+            displayName: Manage Services
+            inputs:
+              Action: Swap Slots
+              WebAppName: bookmark-webapp
+              azureSubscription: $(AzureSubscriptionEndpoint)
+              ResourceGroupName: $(AzureResourceGroup)
+              SwapWithProduction: true
+              SourceSlot: staging

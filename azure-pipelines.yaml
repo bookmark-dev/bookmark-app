@@ -83,7 +83,7 @@ stages:
             displayName: Docker Compose
             inputs:
               action: Run a Docker Compose command
-              azureSubscriptionEndpoint: azure-resources
+              azureSubscriptionEndpoint: $(AzureSubscriptionEndpoint)
               azureContainerRegistry: $(AzureContainerRegistry)
               dockerComposeFile: docker-compose.yaml
               dockerComposeCommand: up -d
@@ -94,7 +94,7 @@ stages:
           - task: AzureWebAppContainer@1
             displayName: Web App Container
             inputs:
-              azureSubscription: $(AzureSubscriptionEndpoint)
+              azureSubscription: azure-resources
               resourceGroupName: $(AzureResourceGroup)
               containers: $(AzureContainerRegistry)/bookmark-app:latest
               appName: bookmark-app
@@ -104,7 +104,7 @@ stages:
             displayName: Service Manager
             inputs:
               Action: Start Azure App Service
-              azureSubscription: $(AzureSubscriptionEndpoint)
+              azureSubscription: azure-resources
               ResourceGroupName: $(AzureResourceGroup)
               SwapWithProduction: true
               WebAppName: bookmark-app

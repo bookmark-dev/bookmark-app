@@ -21,7 +21,6 @@ services:
       - skynet
     volumes: 
       - database:/var/opt/mssql/data
-    restart: always
   restapi:
     container_name: restapi
     depends_on: 
@@ -52,4 +51,3 @@ services:
       - skynet
     links:
     - restapi
-    restart: always

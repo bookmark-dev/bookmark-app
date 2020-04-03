@@ -1,36 +1,45 @@
 using System.Collections.Generic;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using BookMark.RestApi.Databases;
 using BookMark.RestApi.Abstracts;
 using BookMark.RestApi.Models;
 
 namespace BookMark.RestApi.Repositories {
 	public class UserRepository : ARepository<User> {
-		public UserRepository() {
-			table = new List<User>() {
-				new User() {
-					Name = "synaodev",
-					Password =  BCrypt.Net.BCrypt.HashPassword("tylercadena")
-				}
-			};
+		public UserRepository(BookMarkDbContext ctx) : base(ctx) {
+
 		}
-		public override void Post(User user) {
+		public override List<User> All() {
+			DbSet<User> table = _ctx.Set<User>();
+			return table.ToList();
+		}
+		public override User Get(long ID) {
+			DbSet<User> table = _ctx.Set<User>();
+			return table.SingleOrDefault(u => u.UserID == ID);
+		}
+		public override bool Post(User user) {
 			user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+			DbSet<User> table = _ctx.Set<User>();
 			table.Add(user);
+			return _ctx.SaveChanges() >= 1;
 		}
 		public override bool Put(User user) {
 			User found = this.Get(user.UserID);
 			if (found != null) {
 				found = user;
 				found.Password = BCrypt.Net.BCrypt.HashPassword(found.Password);
-				return true;
+				return _ctx.SaveChanges() >= 1;
 			}
 			return false;
 		}
 		public User FindByName(string name) {
-			return table.Find(u => u.Name == name);
-		}
-		public bool CheckExists(string name) {
-			User user = this.FindByName(name);
-			return user != null;
+			DbSet<User> table = _ctx.Set<User>();
+			IQueryable<User> query = table.Where(u => u.Name == name);
+			if (query.Count() == 0) {
+				return null;
+			}
+			return query.First();
 		}
 		public bool CheckCredentials(string name, string password) {
 			User user = this.FindByName(name);

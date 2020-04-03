@@ -4,7 +4,7 @@ namespace BookMark.RestApi.Interfaces {
 	public interface IRepository<T> where T : IModel {
 		List<T> All();
 		T Get(long ID);
-		void Post(T model);
+		bool Post(T model);
 		bool Put(T model);
 		bool Delete(T model);
 	}

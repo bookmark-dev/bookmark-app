@@ -1,18 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using BCrypt.Net;
+using System.Collections.Generic;
 using BookMark.RestApi.Abstracts;
 
 namespace BookMark.RestApi.Models {
 	public class User : AModel {
 		public long UserID { get; set; }
-		[Required]
 		public string Name { get; set; }
-		[Required]
-		[DataType(DataType.Password)]
 		public string Password { get; set; }
-		public List<Appointment> Appointments { get; set; }
+		#region NAVIGATIONAL PROPERTIES
+		public List<UserAppointment> UserAppointments { get; set; }
+		#endregion // NAVIGATIONAL PROPERTIES
 		public User() {
 			UserID = DateTime.Now.Ticks;
 		}

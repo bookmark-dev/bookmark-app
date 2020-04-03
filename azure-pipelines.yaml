@@ -7,31 +7,31 @@ trigger:
 - synaodev
 
 stages:
-  - stage: build
-    jobs:
-      - job: run_build
-        steps:
-          - script: dotnet build
-  - stage: test
-    jobs:
-      - job: run_tests
-        steps:
-          - script: dotnet test
-  - stage: analyze
-    jobs:
-      - job: run_analysis
-        pool:
-          vmImage: ubuntu-18.04
-        steps:
-          - task: DotnetGlobalToolInstaller@0
-            inputs:
-              name: "dotnet-sonarscanner"
-          - script: |
-              dotnet sonarscanner begin /k:"bookmark-app" /o:"bookmark-dev" /d:sonar.login=$SONAR_TOKEN /d:sonar.host.url="https://sonarcloud.io/"
-              dotnet build
-              dotnet sonarscanner end /d:sonar.login=$SONAR_TOKEN
-            env:
-              SONAR_TOKEN: $(SonarToken)
+  # - stage: build
+  #   jobs:
+  #     - job: run_build
+  #       steps:
+  #         - script: dotnet build
+  # - stage: test
+  #   jobs:
+  #     - job: run_tests
+  #       steps:
+  #         - script: dotnet test
+  # - stage: analyze
+  #   jobs:
+  #     - job: run_analysis
+  #       pool:
+  #         vmImage: ubuntu-18.04
+  #       steps:
+  #         - task: DotnetGlobalToolInstaller@0
+  #           inputs:
+  #             name: "dotnet-sonarscanner"
+  #         - script: |
+  #             dotnet sonarscanner begin /k:"bookmark-app" /o:"bookmark-dev" /d:sonar.login=$SONAR_TOKEN /d:sonar.host.url="https://sonarcloud.io/"
+  #             dotnet build
+  #             dotnet sonarscanner end /d:sonar.login=$SONAR_TOKEN
+  #           env:
+  #             SONAR_TOKEN: $(SonarToken)
   - stage: pack
     jobs:
       - job: pack_client

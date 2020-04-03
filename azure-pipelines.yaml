@@ -101,7 +101,7 @@ stages:
             displayName: Web App Container
             inputs:
               appName: bookmark-webapp
-              azureSubscription: $(AzureSubscriptionEndpoint)
+              azureSubscription: azure
               resourceGroupName: $(AzureResourceGroup)
               multicontainerConfigFile: docker-compose.yaml
               deployToSlotOrASE: true
@@ -115,7 +115,7 @@ stages:
             inputs:
               Action: Swap Slots
               WebAppName: bookmark-webapp
-              azureSubscription: $(AzureSubscriptionEndpoint)
+              azureSubscription: azure
               ResourceGroupName: $(AzureResourceGroup)
               SwapWithProduction: true
               SourceSlot: staging

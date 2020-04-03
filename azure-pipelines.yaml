@@ -7,31 +7,31 @@ trigger:
 - synaodev
 
 stages:
-  # - stage: build
-  #   jobs:
-  #     - job: run_build
-  #       steps:
-  #         - script: dotnet build
-  # - stage: test
-  #   jobs:
-  #     - job: run_tests
-  #       steps:
-  #         - script: dotnet test
-  # - stage: analyze
-  #   jobs:
-  #     - job: run_analysis
-  #       pool:
-  #         vmImage: ubuntu-18.04
-  #       steps:
-  #         - task: DotnetGlobalToolInstaller@0
-  #           inputs:
-  #             name: "dotnet-sonarscanner"
-  #         - script: |
-  #             dotnet sonarscanner begin /k:"bookmark-app" /o:"bookmark-dev" /d:sonar.login=$SONAR_TOKEN /d:sonar.host.url="https://sonarcloud.io/"
-  #             dotnet build
-  #             dotnet sonarscanner end /d:sonar.login=$SONAR_TOKEN
-  #           env:
-  #             SONAR_TOKEN: $(SonarToken)
+  - stage: build
+    jobs:
+      - job: run_build
+        steps:
+          - script: dotnet build
+  - stage: test
+    jobs:
+      - job: run_tests
+        steps:
+          - script: dotnet test
+  - stage: analyze
+    jobs:
+      - job: run_analysis
+        pool:
+          vmImage: ubuntu-18.04
+        steps:
+          - task: DotnetGlobalToolInstaller@0
+            inputs:
+              name: "dotnet-sonarscanner"
+          - script: |
+              dotnet sonarscanner begin /k:"bookmark-app" /o:"bookmark-dev" /d:sonar.login=$SONAR_TOKEN /d:sonar.host.url="https://sonarcloud.io/"
+              dotnet build
+              dotnet sonarscanner end /d:sonar.login=$SONAR_TOKEN
+            env:
+              SONAR_TOKEN: $(SonarToken)
   - stage: pack
     jobs:
       - job: pack_client
@@ -39,7 +39,6 @@ stages:
           - task: Docker@2
             inputs:
               command: login
-              # arguments: --username $(AzureContainerUsername) --password $(AzureContainerPassword)
               containerRegistry: bookmark-acr
           - script: |
               docker image build --file client.dockerfile --tag $(AzureContainerRegistry)/bookmark-client .
@@ -53,7 +52,6 @@ stages:
           - task: Docker@2
             inputs:
               command: login
-              # arguments: --username $(AzureContainerUsername) --password $(AzureContainerPassword)
               containerRegistry: bookmark-acr
           - script: |
               docker image build --file restapi.dockerfile --tag $(AzureContainerRegistry)/bookmark-restapi .
@@ -67,7 +65,6 @@ stages:
           - task: Docker@2
             inputs:
               command: login
-              # arguments: --username $(AzureContainerUsername) --password $(AzureContainerPassword)
               containerRegistry: bookmark-acr
           - script: |
               docker image build --file ormdata.dockerfile --tag $(AzureContainerRegistry)/bookmark-ormdata .
@@ -78,24 +75,6 @@ stages:
               containerRegistry: bookmark-acr
   - stage: deploy
     jobs:
-      # - job: compose_app
-      #   pool:
-      #     vmImage: ubuntu-18.04
-      #   steps:
-      #     - task: DockerCompose@0
-      #       displayName: Docker Compose
-      #       inputs:
-      #         action: Run a Docker Compose command
-      #         containerregistrytype: Azure Container Registry
-      #         azureSubscriptionEndpoint: $(AzureSubscriptionEndpoint)
-      #         azureContainerRegistry: $(AzureContainerRegistry)
-      #         dockerComposeFile: docker-compose.yaml
-      #         dockerComposeCommand: up -d
-      #         projectName: bookmark-webapp
-      #         containerName: bookmark-webapp
-      #         qualifyImageNames: true
-      #         buildImages: true
-      #         detached: true
       - job: deploy_app
         pool:
           vmImage: ubuntu-18.04
@@ -109,16 +88,3 @@ stages:
               multicontainerConfigFile: docker-compose.azure.yaml
               # deployToSlotOrASE: true
               # slotName: staging
-      # - job: manage_app
-      #   pool:
-      #     vmImage: ubuntu-18.04
-      #   steps:
-      #     - task: AzureAppServiceManage@0
-      #       displayName: Manage Services
-      #       inputs:
-      #         Action: Swap Slots
-      #         WebAppName: bookmark-webapp
-      #         azureSubscription: azure
-      #         ResourceGroupName: $(AzureResourceGroup)
-      #         SwapWithProduction: true
-      #         SourceSlot: staging

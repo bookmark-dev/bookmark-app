@@ -67,7 +67,7 @@ stages:
               command: login
               containerRegistry: docker
           - script: |
-              docker image build --file ormdata.dockerfile --tag synaodev/bookmark-ormdata .
+              docker izmage build --file ormdata.dockerfile --tag synaodev/bookmark-ormdata .
               docker image push synaodev/bookmark-ormdata
           - task: Docker@2
             inputs:
@@ -85,27 +85,11 @@ stages:
               action: Run a Docker Compose command
               azureSubscriptionEndpoint: $(AzureSubscriptionEndpoint)
               azureContainerRegistry: $(AzureContainerRegistry)
+              containerregistrytype: Azure Container Registry
               dockerComposeFile: docker-compose.yaml
               dockerComposeCommand: up -d
-              projectName: bookmark-app
+              projectName: bookmark-webapp
+              containerName: bookmark-webapp
               qualifyImageNames: true
               buildImages: true
               detached: true
-          - task: AzureWebAppContainer@1
-            displayName: Web App Container
-            inputs:
-              azureSubscription: azure-resources
-              resourceGroupName: $(AzureResourceGroup)
-              containers: $(AzureContainerRegistry)/bookmark-app:latest
-              appName: web-bookmark-app
-              slotName: staging
-              deployToSlotOrASE: true
-          - task: AzureAppServiceManage@0
-            displayName: Service Manager
-            inputs:
-              Action: Start Azure App Service
-              azureSubscription: azure-resources
-              ResourceGroupName: $(AzureResourceGroup)
-              SwapWithProduction: true
-              WebAppName: web-bookmark-app
-              SourceSlot: staging

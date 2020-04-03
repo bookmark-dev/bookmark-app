@@ -3,6 +3,9 @@ version: "3.7"
 networks:
   skynet:
 
+volumes: 
+  database:
+
 services:
   ormdata:
     container_name: ormdata
@@ -10,15 +13,15 @@ services:
     environment: 
       ACCEPT_EULA: "y"
       SA_PASSWORD: "Password12345"
-    build:
-      context: .
-      dockerfile: ormdata.dockerfile
     expose: 
       - 1433
     ports: 
       - 1433:1433
     networks: 
       - skynet
+    volumes: 
+      - database:/var/opt/mssql/data
+    restart: always
   restapi:
     container_name: restapi
     depends_on: 
@@ -26,9 +29,6 @@ services:
     image: bookmarks.azurecr.io/bookmark-restapi
     environment: 
       RestApiUrl: "http://restapi"
-    build: 
-      context: .
-      dockerfile: restapi.dockerfile
     expose:
       - 5000
     ports:
@@ -46,12 +46,10 @@ services:
     image: bookmarks.azurecr.io/bookmark-client
     environment: 
       RestApiUrl: "http://restapi"
-    build: 
-      context: .
-      dockerfile: client.dockerfile
     ports:
       - 8000:80
     networks:
       - skynet
     links:
     - restapi
+    restart: always

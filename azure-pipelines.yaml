@@ -97,7 +97,7 @@ stages:
               azureSubscription: azure-resources
               resourceGroupName: $(AzureResourceGroup)
               containers: $(AzureContainerRegistry)/bookmark-app:latest
-              appName: bookmark-app
+              appName: web-bookmark-app
               slotName: staging
               deployToSlotOrASE: true
           - task: AzureAppServiceManage@0
@@ -107,5 +107,5 @@ stages:
               azureSubscription: azure-resources
               ResourceGroupName: $(AzureResourceGroup)
               SwapWithProduction: true
-              WebAppName: bookmark-app
+              WebAppName: web-bookmark-app
               SourceSlot: staging

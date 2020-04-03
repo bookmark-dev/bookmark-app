@@ -67,7 +67,7 @@ stages:
               command: login
               containerRegistry: docker
           - script: |
-              docker izmage build --file ormdata.dockerfile --tag synaodev/bookmark-ormdata .
+              docker image build --file ormdata.dockerfile --tag synaodev/bookmark-ormdata .
               docker image push synaodev/bookmark-ormdata
           - task: Docker@2
             inputs:
@@ -75,7 +75,7 @@ stages:
               containerRegistry: docker
   - stage: deploy
     jobs:
-      - job: deploy_app
+      - job: compose_app
         pool:
           vmImage: ubuntu-18.04
         steps:
@@ -83,9 +83,9 @@ stages:
             displayName: Docker Compose
             inputs:
               action: Run a Docker Compose command
+              containerregistrytype: Azure Container Registry
               azureSubscriptionEndpoint: $(AzureSubscriptionEndpoint)
               azureContainerRegistry: $(AzureContainerRegistry)
-              containerregistrytype: Azure Container Registry
               dockerComposeFile: docker-compose.yaml
               dockerComposeCommand: up -d
               projectName: bookmark-webapp

@@ -39,43 +39,43 @@ stages:
           - task: Docker@2
             inputs:
               command: login
-              arguments: --username $(AzureContainerUsername) --password $(AzureContainerPassword)
-              containerRegistry: $(AzureContainerRegistry)
+              # arguments: --username $(AzureContainerUsername) --password $(AzureContainerPassword)
+              containerRegistry: bookmark-acr
           - script: |
               docker image build --file client.dockerfile --tag $(AzureContainerRegistry)/bookmark-client .
               docker image push $(AzureContainerRegistry)/bookmark-client
           - task: Docker@2
             inputs:
               command: logout
-              containerRegistry: $(AzureContainerRegistry)
+              containerRegistry: bookmark-acr
       - job: pack_restapi
         steps:
           - task: Docker@2
             inputs:
               command: login
-              arguments: --username $(AzureContainerUsername) --password $(AzureContainerPassword)
-              containerRegistry: $(AzureContainerRegistry)
+              # arguments: --username $(AzureContainerUsername) --password $(AzureContainerPassword)
+              containerRegistry: bookmark-acr
           - script: |
               docker image build --file restapi.dockerfile --tag $(AzureContainerRegistry)/bookmark-restapi .
               docker image push $(AzureContainerRegistry)/bookmark-restapi
           - task: Docker@2
             inputs:
               command: logout
-              containerRegistry: $(AzureContainerRegistry)
+              containerRegistry: bookmark-acr
       - job: pack_ormdata
         steps:
           - task: Docker@2
             inputs:
               command: login
-              arguments: --username $(AzureContainerUsername) --password $(AzureContainerPassword)
-              containerRegistry: $(AzureContainerRegistry)
+              # arguments: --username $(AzureContainerUsername) --password $(AzureContainerPassword)
+              containerRegistry: bookmark-acr
           - script: |
               docker image build --file ormdata.dockerfile --tag $(AzureContainerRegistry)/bookmark-ormdata .
               docker image push $(AzureContainerRegistry)/bookmark-ormdata
           - task: Docker@2
             inputs:
               command: logout
-              containerRegistry: $(AzureContainerRegistry)
+              containerRegistry: bookmark-acr
   - stage: deploy
     jobs:
       # - job: compose_app

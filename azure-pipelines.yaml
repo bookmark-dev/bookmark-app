@@ -85,7 +85,3 @@ stages:
               resourceGroupName: $(AzureResourceGroup)
               multicontainerConfigFile: docker-compose.yaml
               deployToSlotOrASE: true
-              appSettings: |
-                -DOCKER_REGISTRY_SERVER_URL $(AzureContainerRegistry)
-                -DOCKER_REGISTRY_SERVER_USERNAME $(AzureContainerRegistryUsername)
-                -DOCKER_REGISTRY_SERVER_PASSWORD $(AzureContainerRegistryPassword)

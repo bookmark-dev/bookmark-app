@@ -1,10 +1,10 @@
 name: $(date:yyyyMMdd)$(rev:.rr)
 
 pr:
-  - synaodev
+  - master
 
 trigger:
-- synaodev
+- master
 
 stages:
   - stage: build

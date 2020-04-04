@@ -3,36 +3,35 @@ version: "3.7"
 networks:
   skynet:
 
+volumes: 
+  database:
+
 services:
   ormdata:
     container_name: ormdata
-    image: synaodev/bookmark-ormdata
+    image: bookmarks.azurecr.io/bookmark-ormdata
     environment: 
       ACCEPT_EULA: "y"
       SA_PASSWORD: "Password12345"
-    build:
-      context: .
-      dockerfile: ormdata.dockerfile
     expose: 
       - 1433
     ports: 
       - 1433:1433
     networks: 
       - skynet
+    volumes: 
+      - database:/var/opt/mssql/data
   restapi:
     container_name: restapi
     depends_on: 
       - ormdata
-    image: synaodev/bookmark-restapi
+    image: bookmarks.azurecr.io/bookmark-restapi
     environment: 
       RestApiUrl: "http://restapi"
-    build: 
-      context: .
-      dockerfile: restapi.dockerfile
     expose:
       - 5000
     ports:
-      - 5000:80
+      - 5000:5000
     networks:
       - skynet
     links: 
@@ -43,12 +42,9 @@ services:
     depends_on: 
       - ormdata
       - restapi
-    image: synaodev/bookmark-client
+    image: bookmarks.azurecr.io/bookmark-client
     environment: 
       RestApiUrl: "http://restapi"
-    build: 
-      context: .
-      dockerfile: client.dockerfile
     ports:
       - 8000:80
     networks:

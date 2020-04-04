@@ -27,11 +27,9 @@ stages:
             inputs:
               name: "dotnet-sonarscanner"
           - script: |
-              dotnet sonarscanner begin /k:"bookmark-app" /o:"bookmark-dev" /d:sonar.login=$SONAR_TOKEN /d:sonar.host.url="https://sonarcloud.io/"
+              dotnet sonarscanner begin /k:"bookmark-webapp" /o:"bookmark-dev" /d:sonar.login=$(SonarToken) /d:sonar.host.url="https://sonarcloud.io/"
               dotnet build
-              dotnet sonarscanner end /d:sonar.login=$SONAR_TOKEN
-            env:
-              SONAR_TOKEN: $(SonarToken)
+              dotnet sonarscanner end /d:sonar.login=$(SonarToken)
   - stage: pack
     jobs:
       - job: pack_client
@@ -41,8 +39,8 @@ stages:
               command: login
               containerRegistry: bookmark-acr
           - script: |
-              docker image build --file client.dockerfile --tag $(AzureContainerRegistry)/bookmark-client .
-              docker image push $(AzureContainerRegistry)/bookmark-client
+              docker image build --file client.dockerfile --tag $(AzureContainerRegistry)/bookmark-client:latest .
+              docker image push $(AzureContainerRegistry)/bookmark-client:latest
           - task: Docker@2
             inputs:
               command: logout
@@ -54,8 +52,8 @@ stages:
               command: login
               containerRegistry: bookmark-acr
           - script: |
-              docker image build --file restapi.dockerfile --tag $(AzureContainerRegistry)/bookmark-restapi .
-              docker image push $(AzureContainerRegistry)/bookmark-restapi
+              docker image build --file restapi.dockerfile --tag $(AzureContainerRegistry)/bookmark-restapi:latest .
+              docker image push $(AzureContainerRegistry)/bookmark-restapi:latest
           - task: Docker@2
             inputs:
               command: logout
@@ -67,8 +65,8 @@ stages:
               command: login
               containerRegistry: bookmark-acr
           - script: |
-              docker image build --file ormdata.dockerfile --tag $(AzureContainerRegistry)/bookmark-ormdata .
-              docker image push $(AzureContainerRegistry)/bookmark-ormdata
+              docker image build --file ormdata.dockerfile --tag $(AzureContainerRegistry)/bookmark-ormdata:latest .
+              docker image push $(AzureContainerRegistry)/bookmark-ormdata:latest
           - task: Docker@2
             inputs:
               command: logout
@@ -85,6 +83,9 @@ stages:
               appName: bookmark-webapp
               azureSubscription: azure
               resourceGroupName: $(AzureResourceGroup)
-              multicontainerConfigFile: docker-compose.azure.yaml
-              # deployToSlotOrASE: true
-              # slotName: staging
+              multicontainerConfigFile: docker-compose.yaml
+              deployToSlotOrASE: true
+              appSettings: |
+                -DOCKER_REGISTRY_SERVER_URL $(AzureContainerRegistry)
+                -DOCKER_REGISTRY_SERVER_USERNAME $(AzureContainerRegistryUsername)
+                -DOCKER_REGISTRY_SERVER_PASSWORD $(AzureContainerRegistryPassword)

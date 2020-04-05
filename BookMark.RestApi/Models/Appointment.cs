@@ -6,8 +6,13 @@ namespace BookMark.RestApi.Models {
 	public class Appointment : AModel {
 		public long AppointmentID { get; set; }
 		public DateTime DateTime { get; set; }
+		public long AppointmentGroupID { get; set; }
+		public long UserID { get; set; }
+
 		#region NAVIGATIONAL PROPERTIES
-		public List<UserAppointment> UserAppointments { get; set; }
+		public User User { get; set; }
+		public AppointmentGroup AppointmentGroup { get; set; }
+
 		#endregion // NAVIGATIONAL PROPERTIES
 		public override long GetID() {
 			return AppointmentID;

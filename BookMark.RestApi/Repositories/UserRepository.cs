@@ -12,7 +12,11 @@ namespace BookMark.RestApi.Repositories {
 		}
 		public override List<User> All() {
 			DbSet<User> table = _ctx.Set<User>();
-			return table.ToList();
+			return table
+				.Include(u => u.Appointments)
+				.Include(u => u.UserEvents)
+					.ThenInclude(ue => ue.Event)
+				.ToList();
 		}
 		public override User Get(long ID) {
 			DbSet<User> table = _ctx.Set<User>();

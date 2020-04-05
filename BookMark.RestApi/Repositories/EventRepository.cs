@@ -13,7 +13,11 @@ namespace BookMark.RestApi.Repositories
 		public override List<Event> All() 
     {
 			DbSet<Event> table = _ctx.Set<Event>();
-			return table.Include(e => e.UserEvents).ThenInclude(ue => ue.User).ToList();
+			return table
+				.Include(e => e.Organization)
+				.Include(e => e.UserEvents)
+					.ThenInclude(ue => ue.User)
+				.ToList();
 		}
 		public override Event Get(long ID) 
     {

@@ -7,13 +7,16 @@ namespace BookMark.RestApi.Services {
 	public class OrmService {
 		private UserRepository _ur;
 		private AppointmentRepository _ar;
-    private OrganizationRepository _or;
-    private EventRepository _er;
+ 		private OrganizationRepository _or;
+    	private EventRepository _er;
+		private AppointmentGroupRepository _agr;
+
 		public OrmService(BookMarkDbContext ctx) {
 			_ur = new UserRepository(ctx);
 			_ar = new AppointmentRepository(ctx);
-      _or = new OrganizationRepository(ctx);
-      _er = new EventRepository(ctx);
+      		_or = new OrganizationRepository(ctx);
+      		_er = new EventRepository(ctx);
+			_agr = new AppointmentGroupRepository(ctx);
 		}
 		// ALL
 		public List<User> AllUsers() {
@@ -22,12 +25,18 @@ namespace BookMark.RestApi.Services {
 		public List<Appointment> AllAppointments() {
 			return _ar.All();
 		}
+		public List<AppointmentGroup> AllAppointmentGroups() {
+			return _agr.All();
+		}
 		// GET
 		public User GetUser(long ID) {
 			return _ur.Get(ID);
 		}
 		public Appointment GetAppointment(long ID) {
 			return _ar.Get(ID);
+		}
+		public AppointmentGroup GetAppointmentGroup(long ID) {
+			return _agr.Get(ID);
 		}
 		// POST
 		public bool PostUser(User user) {
@@ -36,6 +45,9 @@ namespace BookMark.RestApi.Services {
 		public bool PostAppointment(Appointment appt) {
 			return _ar.Post(appt);
 		}
+		public bool PostAppointmentGroup(AppointmentGroup apptGroup) {
+			return _agr.Post(apptGroup);
+		}
 		// PUT
 		public bool PutUser(User user) {
 			return _ur.Put(user);
@@ -43,12 +55,18 @@ namespace BookMark.RestApi.Services {
 		public bool PutAppointment(Appointment appt) {
 			return _ar.Put(appt);
 		}
+		public bool PutAppointmentGroup(AppointmentGroup apptGroup) {
+			return _agr.Put(apptGroup);
+		}
 		// DELETE
 		public bool DeleteUser(User user) {
 			return _ur.Delete(user);
 		}
 		public bool DeleteAppointment(Appointment appt) {
 			return _ar.Delete(appt);
+		}
+		public bool DeleteAppointmentGroup(AppointmentGroup apptGroup) {
+			return _agr.Delete(apptGroup);
 		}
 		// EXTRA
 		public User FindUserByName(string name) {
@@ -62,8 +80,9 @@ namespace BookMark.RestApi.Services {
 			return _ur.CheckCredentials(name, password);
 		}
 
-    // For Organization and Event Repos
-    public List<Organization> AllOrgs() {
+    	
+		// For Organization and Event Repos
+    	public List<Organization> AllOrgs() {
 			return _or.All();
 		}
 		public List<Event> AllEvents() {

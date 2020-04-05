@@ -7,11 +7,12 @@ namespace BookMark.RestApi.Models {
 	public class Organization : AModel {
 		public long OrganizationID { get; set; }
 		public string Name { get; set; }
+		public string Email { get; set; }
 		public string Password { get; set; }
 
 		#region NAVIGATIONAL PROPERTIES
 		public List<Event> Events { get; set; }
-        // List of AppointmentGroup
+        public List<AppointmentGroup> AppointmentGroups { get; set; }
 		#endregion // NAVIGATIONAL PROPERTIES
 
 		public Organization() {

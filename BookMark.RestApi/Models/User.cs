@@ -7,9 +7,11 @@ namespace BookMark.RestApi.Models {
 	public class User : AModel {
 		public long UserID { get; set; }
 		public string Name { get; set; }
+		public string Email { get; set; }
 		public string Password { get; set; }
+		
 		#region NAVIGATIONAL PROPERTIES
-		public List<UserAppointment> UserAppointments { get; set; }
+		public List<Appointment> Appointments { get; set; }
 		public List<UserEvent> UserEvents { get; set; }
 		#endregion // NAVIGATIONAL PROPERTIES
 		public User() {

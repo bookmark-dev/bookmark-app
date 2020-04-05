@@ -12,11 +12,17 @@ namespace BookMark.RestApi.Repositories {
 		}
 		public override List<Appointment> All() {
 			DbSet<Appointment> table = _ctx.Set<Appointment>();
-			return table.Include(a => a.UserAppointments).ThenInclude(ua => ua.User).ToList();
+			return table
+				.Include(a => a.User)
+				.Include(a => a.AppointmentGroup)
+					.ThenInclude(ag => ag.Organization)
+				.ToList();
 		}
 		public override Appointment Get(long ID) {
 			DbSet<Appointment> table = _ctx.Set<Appointment>();
 			return table.SingleOrDefault(u => u.AppointmentID == ID);
 		}
+		
+		//TODO: Post, etc
 	}
 }

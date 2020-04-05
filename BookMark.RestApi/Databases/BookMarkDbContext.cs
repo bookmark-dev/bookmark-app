@@ -6,6 +6,9 @@ namespace BookMark.RestApi.Databases {
 	public class BookMarkDbContext : DbContext {
 		private DbSet<User> Users { get; set; }
 		private DbSet<Appointment> Appointments { get; set; }
+		public DbSet<Organization> Organizations { get; set; }
+		public DbSet<Event> Events { get; set; }
+		public DbSet<UserEvent> UserEvents { get; set; }
 		public BookMarkDbContext(DbContextOptions options) : base(options) {
 
 		}
@@ -26,6 +29,23 @@ namespace BookMark.RestApi.Databases {
 				new User() { UserID = 1, Name = "synaodev", Password = BCrypt.Net.BCrypt.HashPassword("tylercadena") }
 			};
 			builder.Entity<User>().HasData(users);
+
+			// For Organization, Event, and UserEvents
+			builder.Entity<Organization>().HasKey(o => o.OrganizationID);
+			builder.Entity<Organization>().Property(o => o.OrganizationID).ValueGeneratedNever();
+			builder.Entity<Event>().HasKey(e => e.EventID);
+			builder.Entity<Event>().Property(e => e.EventID).ValueGeneratedNever();
+			builder.Entity<Organization>().HasMany(o => o.Events).WithOne(e => e.Organization).HasForeignKey(e => e.OrganizationID);
+			builder.Entity<Event>().HasMany(e => e.UserEvents).WithOne(ue => ue.Event).HasForeignKey(ue => ue.EventID);
+			builder.Entity<UserEvent>().HasKey(ue => ue.UserEventID);
+			builder.Entity<UserEvent>().Property(ue => ue.UserEventID).ValueGeneratedNever();
+			builder.Entity<UserEvent>().HasOne(ue => ue.Event).WithMany(e => e.UserEvents).HasForeignKey(ue => ue.EventID);
+			builder.Entity<UserEvent>().HasOne(ue => ue.User).WithMany(u => u.UserEvents).HasForeignKey(ue => ue.UserID);
+			// Seed Data
+			Organization[] org = new Organization[] {
+				new Organization() { Name = "Revature", Password = BCrypt.Net.BCrypt.HashPassword("Revature") }
+			};
+			builder.Entity<Organization>().HasData(org);
 		}
 	}
 }

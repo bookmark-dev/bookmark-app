@@ -121,12 +121,12 @@ namespace BookMark.RestApi.Migrations
             migrationBuilder.InsertData(
                 table: "Organizations",
                 columns: new[] { "OrganizationID", "Name", "Password" },
-                values: new object[] { 637216514343504550L, "Revature", "$2a$11$nrRbnFhtGzOyesmefEcmDeNcfmsNn2cl09JBLPqw/4OkQlr/HT3ve" });
+                values: new object[] { 637216588176268060L, "Revature", "$2a$11$iJUdOFrGEqvoYE87FMO/4e1M2.YGUB4epVYYk1Z.ZAu24Hi4Pjshu" });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserID", "Name", "Password" },
-                values: new object[] { 1L, "synaodev", "$2a$11$kW0zTdClOOPa6PMUwZa9auin/2.QuhGrB2tDzjZv8x18oGU1dWysq" });
+                values: new object[] { 1L, "synaodev", "$2a$11$QEyeGMOrJxL8KXvGrxRFnuXkPwi7eKgIyt2cWWtM9GlF9AE93N5EC" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Events_OrganizationID",

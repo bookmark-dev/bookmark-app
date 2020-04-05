@@ -22,7 +22,7 @@ namespace BookMark.RestApi.Models {
 			EventID = DateTime.Now.Ticks;
 		}
 
-        public override long GetID() {
+    public override long GetID() {
 			return EventID;
 		}
 	}

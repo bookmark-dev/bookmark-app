@@ -80,9 +80,9 @@ namespace BookMark.RestApi.Migrations
                     b.HasData(
                         new
                         {
-                            OrganizationID = 637216514343504550L,
+                            OrganizationID = 637216588176268060L,
                             Name = "Revature",
-                            Password = "$2a$11$nrRbnFhtGzOyesmefEcmDeNcfmsNn2cl09JBLPqw/4OkQlr/HT3ve"
+                            Password = "$2a$11$iJUdOFrGEqvoYE87FMO/4e1M2.YGUB4epVYYk1Z.ZAu24Hi4Pjshu"
                         });
                 });
 
@@ -106,7 +106,7 @@ namespace BookMark.RestApi.Migrations
                         {
                             UserID = 1L,
                             Name = "synaodev",
-                            Password = "$2a$11$kW0zTdClOOPa6PMUwZa9auin/2.QuhGrB2tDzjZv8x18oGU1dWysq"
+                            Password = "$2a$11$QEyeGMOrJxL8KXvGrxRFnuXkPwi7eKgIyt2cWWtM9GlF9AE93N5EC"
                         });
                 });
 

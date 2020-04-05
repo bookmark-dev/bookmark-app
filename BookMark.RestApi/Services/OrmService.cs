@@ -7,9 +7,13 @@ namespace BookMark.RestApi.Services {
 	public class OrmService {
 		private UserRepository _ur;
 		private AppointmentRepository _ar;
+    private OrganizationRepository _or;
+    private EventRepository _er;
 		public OrmService(BookMarkDbContext ctx) {
 			_ur = new UserRepository(ctx);
 			_ar = new AppointmentRepository(ctx);
+      _or = new OrganizationRepository(ctx);
+      _er = new EventRepository(ctx);
 		}
 		// ALL
 		public List<User> AllUsers() {
@@ -56,6 +60,53 @@ namespace BookMark.RestApi.Services {
 		}
 		public bool CheckUserCredentials(string name, string password) {
 			return _ur.CheckCredentials(name, password);
+		}
+
+    // For Organization and Event Repos
+    public List<Organization> AllOrgs() {
+			return _or.All();
+		}
+		public List<Event> AllEvents() {
+			return _er.All();
+		}
+		// GET
+		public Organization GetOrg(long ID) {
+			return _or.Get(ID);
+		}
+		public Event GetEvent(long ID) {
+			return _er.Get(ID);
+		}
+		// POST
+		public bool PostOrg(Organization org) {
+			return _or.Post(org);
+		}
+		public bool PostEvent(Event ev) {
+			return _er.Post(ev);
+		}
+		// PUT
+		public bool PutOrg(Organization org) {
+			return _or.Put(org);
+		}
+		public bool PutEvent(Event ev) {
+			return _er.Put(ev);
+		}
+		// DELETE
+		public bool DeleteOrg(Organization org) {
+			return _or.Delete(org);
+		}
+		public bool DeleteEvent(Event ev) {
+			return _er.Delete(ev);
+		}
+		// EXTRA
+		public Organization FindOrgByName(string name) {
+			return _or.FindByName(name);
+		}
+		public bool CheckOrgExists(string name) {
+			Organization org = this.FindOrgByName(name);
+			return org != null;
+		}
+		public bool CheckOrgCredentials(string name, string password) {
+			return _or.CheckCredentials(name, password);
 		}
 	}
 }

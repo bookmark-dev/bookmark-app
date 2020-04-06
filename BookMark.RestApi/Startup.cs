@@ -23,6 +23,7 @@ namespace BookMark.RestApi {
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services) {
             string base_url = Environment.GetEnvironmentVariable("RestApiUrl");
+            services.AddCors();
             services.AddControllers();
             services.AddDbContext<BookMarkDbContext>(options => {
                 options.UseSqlServer(Configuration.GetConnectionString(base_url == null ? "local" : "docker"));

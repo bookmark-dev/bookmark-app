@@ -1,5 +1,13 @@
 @model BookMark.Client.Models.EventViewModel
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/js/bootstrap-datetimepicker.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.7.14/css/bootstrap-datetimepicker.min.css">
+
 <h1>New Event</h1>
 <form action="/event/create" method="POST">
 	@Html.AntiForgeryToken()
@@ -16,8 +24,23 @@
 	<input type="text" asp-for="@Model.Info">
 	@Html.ValidationMessageFor(evm => evm.Info)
 
-  <label asp-for="@Model.DateTime">Date and Time</label>
+  @* <label asp-for="@Model.DateTime">Date and Time</label>
 	<input type="datetime-local" asp-for="@Model.DateTime">
-	@Html.ValidationMessageFor(evm => evm.DateTime)
+	@Html.ValidationMessageFor(evm => evm.DateTime) *@
+
+  <div class="container">
+      <div class="row">
+          <label asp-for="@Model.DateTime">Date and Time</label>
+          <div class='col-sm-3'>
+              <input type='datetime-local' class="form-control" id='datetimepicker4' asp-for="@Model.DateTime" />
+          </div>
+          <script type="text/javascript">
+              $(function () {
+                  $('#datetimepicker4').datetimepicker();
+              });
+          </script>
+      </div>
+  </div>
+
 	<button type="submit">Submit</button>
 </form>

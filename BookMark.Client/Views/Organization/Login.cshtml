@@ -1,0 +1,16 @@
+@model BookMark.Client.Models.OrganizationViewModel
+
+<h1>Login for Organizations</h1>
+
+<form action="/organization/login" method="POST">
+	@Html.AntiForgeryToken()
+	<label asp-for="@Model.Email">Email</label>
+	<input type="text" asp-for="@Model.Email">
+	@Html.ValidationMessageFor(ovm => ovm.Email)
+  <br/>
+	<label asp-for="@Model.Password">Password</label>
+	<input type="password" asp-for="@Model.Password">
+	@Html.ValidationMessageFor(ovm => ovm.Password)
+  <br/>
+	<button type="submit">Login</button>
+</form>

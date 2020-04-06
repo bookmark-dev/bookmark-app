@@ -39,11 +39,11 @@ namespace BookMark.RestApi.Controllers {
 			return BadRequest("Couldn't parse user ID!");
 		}
 
-		[HttpGet("/api/org/name/{name}")]
+		[HttpGet("/api/org/email/{email}")]
 		public IActionResult GetEmail(string email) 
     	{
 			if (email.Length == 0) {
-				return BadRequest("Name is invalid!");
+				return BadRequest("Email is invalid!");
 			}
 			Organization org = _srv.FindOrgByEmail(email);
 			if (org == null) {

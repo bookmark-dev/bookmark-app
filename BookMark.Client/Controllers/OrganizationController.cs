@@ -42,7 +42,7 @@ namespace BookMark.Client.Controllers {
 
 		static public async Task<Organization> FindOrgByEmail(HttpClient client, string email) 
     {
-			HttpResponseMessage response = await client.GetAsync($"/api/org/name/{email}");
+			HttpResponseMessage response = await client.GetAsync($"/api/org/email/{email}");
 			if (!response.IsSuccessStatusCode) 
       {
 				return null;

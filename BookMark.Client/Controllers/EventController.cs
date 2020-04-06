@@ -64,9 +64,9 @@ namespace BookMark.Client.Controllers {
 		}
 
     // Shows the events for current user/org
-    	[HttpGet]
+    [HttpGet]
 		public IActionResult Index() 
-    	{
+    {
 			Task<Organization> org_task = GetCurrentOrg(HttpContext, client);
 			org_task.Wait();
 			Organization org = org_task.Result;
@@ -78,14 +78,14 @@ namespace BookMark.Client.Controllers {
       if (user != null) 
       {
         // TODO: update if we update login to user email
-				Task<List<Event>> ev_task = FindUserEvents(client, user.Name); // This function takes HttpContext and a string called "email".
+				Task<List<Event>> ev_task = FindUserEvents(client, user.Name);
 			  ev_task.Wait();
 			  List<Event> events = ev_task.Result;	
         return View(events);	
 			}
 			else if (org != null)
 			{
-				Task<List<Event>> ev_task = FindOrgEvents(client, org.Email);
+				Task<List<Event>> ev_task = SearchEventByEmail(client, org.Email);
         List<Event> events = ev_task.Result;	
 				return View(events);
 			}
@@ -107,7 +107,7 @@ namespace BookMark.Client.Controllers {
 		}
 
     // Get events for a organization
-		static public async Task<List<Event>> FindOrgEvents(HttpClient client, string email) 
+		static public async Task<List<Event>> SearchEventByEmail(HttpClient client, string email) 
     {
 			HttpResponseMessage response = await client.GetAsync($"/api/event/org/{email}");
 			if (!response.IsSuccessStatusCode) 
@@ -117,7 +117,7 @@ namespace BookMark.Client.Controllers {
 			return await response.Content.ReadAsAsync<List<Event>>();
 		}
 
-    // TODO: Search by Name
+
 		static public async Task<List<Event>> SearchEventByName(HttpClient client, string name) 
     {
 			HttpResponseMessage response = await client.GetAsync($"/api/event/search/{name}");
@@ -127,17 +127,41 @@ namespace BookMark.Client.Controllers {
 			return await response.Content.ReadAsAsync<List<Event>>();
 		}
 
+    [HttpGet]
+		public IActionResult Create()
+		{
+			return View();
+		}
+		[HttpPost]
+		public IActionResult Create(EventViewModel model) {
+			if (!ModelState.IsValid) {
+				return View(model);
+			}
+			Task<long> task_long = Create(HttpContext, client, model.Name, model.Location, model.Info, model.DateTime);
+			task_long.Wait();
+			long result = task_long.Result;
+			if (result == 0) {
+				return View(model);
+			}
+      // TODO: Change redirect to go Confirmation/Event page?
+			return Redirect("/organization/index");
+		}
 
-    /*
-		static public async Task<long> CreateNewEvent(HttpClient client, string name, string location, string info, DateTime datetime) 
+		static public async Task<long> Create(HttpContext context, HttpClient client, string name, string location, string info, DateTime datetime) 
     {
+			Task<Organization> task_org = GetCurrentOrg(context, client);
+			task_org.Wait();
+			Organization org = task_org.Result;
+			if (org == null) {
+				return 0;
+			}
 			Event ev = new Event() 
       {
 				Name = name,	
       	Location = location,
       	DateTime = datetime,
       	Info = info,
-      	Organization = GetCurrentOrg(context, client)
+      	Organization = org
 			};
 			long EventID = ev.EventID;
 			HttpContent content = new StringContent(ev.ToString());
@@ -148,51 +172,7 @@ namespace BookMark.Client.Controllers {
 			}
 			return EventID;
 		}
-    */
 
-		// [HttpPost]
-		// public IActionResult Login(UserViewModel uvm) {
-		// 	if (!ModelState.IsValid) {
-		// 		return View(uvm);
-		// 	}
-		// 	// Console.WriteLine($"Model = (Name: {uvm.Name}, Password: {uvm.Password})");
-		// 	Task<User> task = FindUserByName(client, uvm.Name);
-		// 	task.Wait();
-		// 	User user = task.Result;
-		// 	if (user == null) {
-		// 		// Console.WriteLine("Couldn't get user!");
-		// 		return View(uvm);
-		// 	}
-		// 	// Console.WriteLine($"Entity = (Name: {user.Name}, Password {user.Password})");
-		// 	if (!user.CheckCredentials(uvm.Password)) {
-		// 		return View(uvm);
-		// 	}
-		// 	HttpContext.Session.SetString("AcctID", user.UserID.ToString());
-		// 	return Redirect("/user/index");
-		// }
-    /*
-		[HttpGet]
-		public IActionResult Create() 
-    {
-			return View();
-		}
-
-		[HttpPost]
-		public IActionResult Create(EventViewModel evm) {
-			ViewData["RegErr"] = "";
-			if (!ModelState.IsValid) {
-				return View(evm);
-			}
-			Task<long> find_id = CreateNewEvent(client, evm.Name, evm.Location, evm.Info, evm.DateTime);
-			find_id.Wait();
-			long ID = find_id.Result;
-			if (ID == 0) {
-				ViewData["RegErr"] = "Registration unsuccessful!";
-				return View(evm);
-			}
-			HttpContext.Session.SetString("AcctID", ID.ToString());
-			return Redirect("/user/index");
-		}
-    */
+		
 	}
 }

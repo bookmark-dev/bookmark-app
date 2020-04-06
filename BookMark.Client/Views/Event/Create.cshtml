@@ -1,0 +1,23 @@
+@model BookMark.Client.Models.EventViewModel
+
+<h1>New Event</h1>
+<form action="/event/create" method="POST">
+	@Html.AntiForgeryToken()
+
+	<label asp-for="@Model.Name">Event Title</label>
+	<input type="text" asp-for="@Model.Name">
+	@Html.ValidationMessageFor(evm => evm.Name)
+
+	<label asp-for="@Model.Location">Location</label>
+	<input type="text" asp-for="@Model.Location">
+	@Html.ValidationMessageFor(evm => evm.Location)           
+
+	<label asp-for="@Model.Info">Info</label>
+	<input type="text" asp-for="@Model.Info">
+	@Html.ValidationMessageFor(evm => evm.Info)
+
+  <label asp-for="@Model.DateTime">Date and Time</label>
+	<input type="datetime-local" asp-for="@Model.DateTime">
+	@Html.ValidationMessageFor(evm => evm.DateTime)
+	<button type="submit">Submit</button>
+</form>

@@ -14,36 +14,35 @@ namespace BookMark.Client.Controllers {
 		private readonly HttpClient client;
 
 		public EventController() 
-    {
+    	{
 			service = HttpService.Service;
 			client = HttpService.Client;
 		}
 
-		static public async Task<Organization> GetCurrentOrg(HttpContext context, HttpClient client) 
-    {
+		static public async Task<Organization> GetCurrentOrg(HttpContext context, HttpClient client) {
 			string org_id = context.Session.GetString("OrgID");
 			if (org_id == null) 
-      {
+      		{
 				return null;
 			}
 			if (org_id.Length == 0) 
-      {
+      		{
 				return null;
 			}
 			long ID = 0;
 			if (!long.TryParse(org_id, out ID)) 
-      {
+      		{
 				return null;
 			}
 			HttpResponseMessage response = await client.GetAsync($"/api/org/{ID}");
 			if (!response.IsSuccessStatusCode) 
-      {
+      		{
 				return null;
 			}
 			return await response.Content.ReadAsAsync<Organization>();
 		}
 
-    static public async Task<User> GetCurrentUser(HttpContext context, HttpClient client) {
+    	static public async Task<User> GetCurrentUser(HttpContext context, HttpClient client) {
 			string acct_id = context.Session.GetString("AcctID");
 			if (acct_id == null) {
 				return null;
@@ -53,46 +52,53 @@ namespace BookMark.Client.Controllers {
 			}
 			long ID = 0;
 			if (!long.TryParse(acct_id, out ID)) 
-      {
+      		{
 				return null;
 			}
 			HttpResponseMessage response = await client.GetAsync($"/api/user/{ID}");
 			if (!response.IsSuccessStatusCode) 
-      {
+      		{
 				return null;
 			}
 			return await response.Content.ReadAsAsync<User>();
 		}
 
     // Shows the events for current user/org
-    [HttpGet]
+    	[HttpGet]
 		public IActionResult Index() 
-    {
+    	{
 			Task<Organization> org_task = GetCurrentOrg(HttpContext, client);
 			org_task.Wait();
 			Organization org = org_task.Result;
-
       Task<User> user_task = GetCurrentUser(HttpContext, client);
 			user_task.Wait();
 			User user = user_task.Result;
-
+      
       // Get all Events for Current Org or User
-
       if (user != null) 
       {
-				
+        // TODO: update if we update login to user email
+				Task<List<Event>> ev_task = FindUserEvents(client, user.Name); // This function takes HttpContext and a string called "email".
+			  ev_task.Wait();
+			  List<Event> events = ev_task.Result;	
+        return View(events);	
 			}
-      else if (org != null)
-      {
-        return View(new List<EventViewModel>());
-      }
+			else if (org != null)
+			{
+				Task<List<Event>> ev_task = FindOrgEvents(client, org.Email);
+        List<Event> events = ev_task.Result;	
+				return View(events);
+			}
 
 			return Redirect("/home/index");
 		}
+    
 
+		// (you need context to access session stuff)
+		// (you need client to make HTTP requests)
     // Get events for a user
 		static public async Task<List<Event>> FindUserEvents(HttpClient client, string name) 
-    {
+    	{
 			HttpResponseMessage response = await client.GetAsync($"/api/event/user/{name}");
 			if (!response.IsSuccessStatusCode) {
 				return null;
@@ -101,9 +107,9 @@ namespace BookMark.Client.Controllers {
 		}
 
     // Get events for a organization
-		static public async Task<List<Event>> FindOrgEvents(HttpClient client, string name) 
+		static public async Task<List<Event>> FindOrgEvents(HttpClient client, string email) 
     {
-			HttpResponseMessage response = await client.GetAsync($"/api/event/org/{name}");
+			HttpResponseMessage response = await client.GetAsync($"/api/event/org/{email}");
 			if (!response.IsSuccessStatusCode) 
       {
 				return null;
@@ -121,24 +127,6 @@ namespace BookMark.Client.Controllers {
 			return await response.Content.ReadAsAsync<List<Event>>();
 		}
 
-    static public async Task<List<Event>> FindUserEvents(HttpClient client, string name) 
-    {
-			HttpResponseMessage response = await client.GetAsync($"/api/event/user/{name}");
-			if (!response.IsSuccessStatusCode) 
-      {
-				return null;
-			}
-			return await response.Content.ReadAsAsync<List<Event>>();
-		}
-        static public async Task<List<Event>> FindOrgEvents(HttpClient client, string email) 
-    {
-			HttpResponseMessage response = await client.GetAsync($"/api/event/org/{email}");
-			if (!response.IsSuccessStatusCode) 
-      {
-				return null;
-			}
-			return await response.Content.ReadAsAsync<List<Event>>();
-		}
 
     /*
 		static public async Task<long> CreateNewEvent(HttpClient client, string name, string location, string info, DateTime datetime) 

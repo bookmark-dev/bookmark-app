@@ -60,10 +60,9 @@ namespace BookMark.RestApi.Repositories
 		}
 
 		// TODO: update when update user email
-		public List<Event> FindByUser(string name) 
-    {
+		public List<Event> FindByUser(string name) {
 			DbSet<Event> table = _ctx.Set<Event>();
-			IQueryable<Event> query = table.Where(e => e.UserEvents.User.Name.Equals(name))
+			IQueryable<Event> query = table.Where(e => e.UserEvents.Any(ue => ue.User.Name.Equals(name)))
 				.Include(e => e.Organization)
 				.Include(e => e.UserEvents)
 				.ThenInclude(ue => ue.User);

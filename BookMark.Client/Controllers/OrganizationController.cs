@@ -1,9 +1,11 @@
 // TODO: switch login using email
 using System;
+using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using BookMark.RestApi.Models;
 using BookMark.Client.Models;
 using BookMark.Client.Utils;
@@ -50,15 +52,20 @@ namespace BookMark.Client.Controllers {
 			return await response.Content.ReadAsAsync<Organization>();
 		}
 
-		static public async Task<long> CreateNewOrg(HttpClient client, string name, string password) 
+		static public async Task<long> CreateNewOrg(HttpClient client, string name, string email, string password) 
     {
 			Organization org = new Organization() 
       {
 				Name = name,
+        Email = email,
 				Password = password
 			};
 			long OrgID = org.OrganizationID;
-			HttpContent content = new StringContent(org.ToString());
+			HttpContent content = new StringContent(
+				JsonConvert.SerializeObject(org),
+				Encoding.UTF8,
+				"application/json"
+			);
 			HttpResponseMessage response = await client.PostAsync("/api/org", content);
 			if (!response.IsSuccessStatusCode) 
       {
@@ -133,7 +140,7 @@ namespace BookMark.Client.Controllers {
 				ViewData["RegErr"] = "Email is already taken!";
 				return View(ovm);
 			}
-			Task<long> find_id = CreateNewOrg(client, ovm.Name, ovm.Password);
+			Task<long> find_id = CreateNewOrg(client, ovm.Name, ovm.Email, ovm.Password);
 			find_id.Wait();
 			long ID = find_id.Result;
 			if (ID == 0) 

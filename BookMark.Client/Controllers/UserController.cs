@@ -54,7 +54,6 @@ namespace BookMark.Client.Controllers {
 				Encoding.UTF8, 
 				"application/json"
 			);
-			System.Console.WriteLine(content.ToString());
 			HttpResponseMessage response = await client.PostAsync("/api/user", content);
 			if (!response.IsSuccessStatusCode) {
 				return 0;
@@ -88,10 +87,7 @@ namespace BookMark.Client.Controllers {
 			}
 			if (!user.CheckCredentials(uvm.Password)) {
 				return View(uvm);
-      }
-
-
-		
+      			}
 			HttpContext.Session.SetString("AcctID", user.UserID.ToString());
 			return Redirect("/user/index");
 		}

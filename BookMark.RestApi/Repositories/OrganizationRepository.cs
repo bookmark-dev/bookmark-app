@@ -22,7 +22,7 @@ namespace BookMark.RestApi.Repositories {
 		public override Organization Get(long ID) 
     	{
 			DbSet<Organization> table = _ctx.Set<Organization>();
-			return table.SingleOrDefault(o => o.OrganizationID == ID);
+			return table.SingleOrDefault(o => o.OrganizationID.Equals(ID));
 		}
 		public override bool Post(Organization org) 
     	{
@@ -45,7 +45,7 @@ namespace BookMark.RestApi.Repositories {
 		public Organization FindOrgByEmail(string email) 
     	{
 			DbSet<Organization> table = _ctx.Set<Organization>();
-			IQueryable<Organization> query = table.Where(o => o.Email == email);
+			IQueryable<Organization> query = table.Where(o => o.Email.Equals(email));
 			if (query.Count() == 0) 
       		{
 				return null;

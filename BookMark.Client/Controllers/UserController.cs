@@ -20,10 +20,7 @@ namespace BookMark.Client.Controllers {
 		}
 		static public async Task<User> GetCurrentUser(HttpContext context, HttpClient client) {
 			string acct_id = context.Session.GetString("AcctID");
-			if (acct_id == null) {
-				return null;
-			}
-			if (acct_id.Length == 0) {
+			if (acct_id == null || acct_id.Length == 0) {
 				return null;
 			}
 			long ID = 0;
@@ -87,7 +84,7 @@ namespace BookMark.Client.Controllers {
 			}
 			if (!user.CheckCredentials(uvm.Password)) {
 				return View(uvm);
-      			}
+      		}
 			HttpContext.Session.SetString("AcctID", user.UserID.ToString());
 			return Redirect("/user/index");
 		}

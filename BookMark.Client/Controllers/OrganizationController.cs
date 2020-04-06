@@ -18,46 +18,32 @@ namespace BookMark.Client.Controllers {
 			service = HttpService.Service;
 			client = HttpService.Client;
 		}
-		static public async Task<Organization> GetCurrentOrg(HttpContext context, HttpClient client) 
-    {
+		static public async Task<Organization> GetCurrentOrg(HttpContext context, HttpClient client) {
 			string org_id = context.Session.GetString("OrgID");
-			if (org_id == null) 
-      {
-				return null;
-			}
-			if (org_id.Length == 0) 
-      {
+			if (org_id == null || org_id.Length == 0) {
 				return null;
 			}
 			long ID = 0;
-			if (!long.TryParse(org_id, out ID)) 
-      {
+			if (!long.TryParse(org_id, out ID)) {
 				return null;
 			}
 			HttpResponseMessage response = await client.GetAsync($"/api/org/{ID}");
-			if (!response.IsSuccessStatusCode) 
-      {
+			if (!response.IsSuccessStatusCode) {
 				return null;
 			}
 			return await response.Content.ReadAsAsync<Organization>();
 		}
-
-		static public async Task<Organization> FindOrgByEmail(HttpClient client, string email) 
-    {
+		static public async Task<Organization> FindOrgByEmail(HttpClient client, string email) {
 			HttpResponseMessage response = await client.GetAsync($"/api/org/email/{email}");
-			if (!response.IsSuccessStatusCode) 
-      {
+			if (!response.IsSuccessStatusCode) {
 				return null;
 			}
 			return await response.Content.ReadAsAsync<Organization>();
 		}
-
-		static public async Task<long> CreateNewOrg(HttpClient client, string name, string email, string password) 
-    {
-			Organization org = new Organization() 
-      {
+		static public async Task<long> CreateNewOrg(HttpClient client, string name, string email, string password) {
+			Organization org = new Organization() {
 				Name = name,
-        Email = email,
+        		Email = email,
 				Password = password
 			};
 			long OrgID = org.OrganizationID;
@@ -67,84 +53,65 @@ namespace BookMark.Client.Controllers {
 				"application/json"
 			);
 			HttpResponseMessage response = await client.PostAsync("/api/org", content);
-			if (!response.IsSuccessStatusCode) 
-      {
+			if (!response.IsSuccessStatusCode) {
 				return 0;
 			}
 			return OrgID;
 		}
-
 		[HttpGet]
-		public IActionResult Index() 
-    {
+		public IActionResult Index() {
 			Task<Organization> org_task = GetCurrentOrg(HttpContext, client);
 			org_task.Wait();
 			Organization org = org_task.Result;
-			if (org == null) 
-      {
+			if (org == null) {
 				return Redirect("/home/index");
 			}
 			return View(new OrganizationViewModel(org));
 		}
-
 		[HttpGet]
-		public IActionResult Login() 
-    {
+		public IActionResult Login() {
 			return View();
 		}
-
 		[HttpPost]
-		public IActionResult Login(OrganizationViewModel ovm) 
-    {
-			if (!ModelState.IsValid) 
-      {
+		public IActionResult Login(OrganizationViewModel ovm) {
+			if (!ModelState.IsValid) {
 				return View(ovm);
 			}
-			// Console.WriteLine($"Model = (Name: {uvm.Name}, Password: {uvm.Password})");
 			Task<Organization> task = FindOrgByEmail(client, ovm.Email);
 			task.Wait();
 			Organization org = task.Result;
-			if (org == null) 
-      {
-				// Console.WriteLine("Couldn't get user!");
+			if (org == null) {
 				return View(ovm);
 			}
-			// Console.WriteLine($"Entity = (Name: {user.Name}, Password {user.Password})");
-			if (!org.CheckCredentials(ovm.Password)) 
-      {
+			if (!org.CheckCredentials(ovm.Password)) {
 				return View(ovm);
 			}
 			HttpContext.Session.SetString("OrgID", org.OrganizationID.ToString());
 			return Redirect("/organization/index");
 		}
-
 		[HttpGet]
-		public IActionResult Register() 
-    {
+		public IActionResult Register() {
 			return View();
 		}
-
 		[HttpPost]
-		public IActionResult Register(OrganizationViewModel ovm) //TODO: Confirm this works/update to match user register code if different
-    {
+		public IActionResult Register(OrganizationViewModel ovm) {
 			ViewData["RegErr"] = "";
-			if (!ModelState.IsValid) 
-      {
+			if (!ModelState.IsValid) {
+				return View(ovm);
+			} else if (ovm.Name.Length == 0) {
 				return View(ovm);
 			}
-			Task<Organization> find_org = FindOrgByEmail(client, ovm.Email);	//TODO: maybe add check to FindOrgByName, as well
+			Task<Organization> find_org = FindOrgByEmail(client, ovm.Email);
 			find_org.Wait();
 			Organization org = find_org.Result;
-			if (org != null) 
-      {
+			if (org != null) {
 				ViewData["RegErr"] = "Email is already taken!";
 				return View(ovm);
 			}
 			Task<long> find_id = CreateNewOrg(client, ovm.Name, ovm.Email, ovm.Password);
 			find_id.Wait();
 			long ID = find_id.Result;
-			if (ID == 0) 
-      {
+			if (ID == 0) {
 				ViewData["RegErr"] = "Registration unsuccessful!";
 				return View(ovm);
 			}

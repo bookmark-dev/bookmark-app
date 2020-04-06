@@ -2,7 +2,7 @@
 
 <p>@ViewData["RegErr"]</p>
 
-<form action="/user/login" method="POST">
+<form action="/user/register" method="POST">
 	@Html.AntiForgeryToken()
 	<label asp-for="@Model.Name">Username</label>
 	<input type="text" asp-for="@Model.Name">

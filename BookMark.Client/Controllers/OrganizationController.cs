@@ -1,5 +1,4 @@
 // TODO: switch login using email
-using System;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
@@ -12,14 +11,12 @@ using BookMark.Client.Utils;
 
 namespace BookMark.Client.Controllers {
 	public class OrganizationController : Controller {
-		private readonly HttpService service;
-		private readonly HttpClient client;
-		public OrganizationController() {
-			service = HttpService.Service;
-			client = HttpService.Client;
+		private readonly HttpService _service;
+		public OrganizationController(HttpService service) {
+			_service = service;
 		}
-		static public async Task<Organization> GetCurrentOrg(HttpContext context, HttpClient client) {
-			string org_id = context.Session.GetString("OrgID");
+		private async Task<Organization> GetCurrentOrg() {
+			string org_id = HttpContext.Session.GetString("OrgID");
 			if (org_id == null || org_id.Length == 0) {
 				return null;
 			}
@@ -27,20 +24,20 @@ namespace BookMark.Client.Controllers {
 			if (!long.TryParse(org_id, out ID)) {
 				return null;
 			}
-			HttpResponseMessage response = await client.GetAsync($"/api/org/{ID}");
+			HttpResponseMessage response = await _service.client.GetAsync($"/api/org/{ID}");
 			if (!response.IsSuccessStatusCode) {
 				return null;
 			}
 			return await response.Content.ReadAsAsync<Organization>();
 		}
-		static public async Task<Organization> FindOrgByEmail(HttpClient client, string email) {
-			HttpResponseMessage response = await client.GetAsync($"/api/org/email/{email}");
+		private async Task<Organization> FindOrgByEmail(string email) {
+			HttpResponseMessage response = await _service.client.GetAsync($"/api/org/email/{email}");
 			if (!response.IsSuccessStatusCode) {
 				return null;
 			}
 			return await response.Content.ReadAsAsync<Organization>();
 		}
-		static public async Task<long> CreateNewOrg(HttpClient client, string name, string email, string password) {
+		private async Task<long> CreateNewOrg(string name, string email, string password) {
 			Organization org = new Organization() {
 				Name = name,
         		Email = email,
@@ -52,7 +49,7 @@ namespace BookMark.Client.Controllers {
 				Encoding.UTF8,
 				"application/json"
 			);
-			HttpResponseMessage response = await client.PostAsync("/api/org", content);
+			HttpResponseMessage response = await _service.client.PostAsync("/api/org", content);
 			if (!response.IsSuccessStatusCode) {
 				return 0;
 			}
@@ -60,7 +57,7 @@ namespace BookMark.Client.Controllers {
 		}
 		[HttpGet]
 		public IActionResult Index() {
-			Task<Organization> org_task = GetCurrentOrg(HttpContext, client);
+			Task<Organization> org_task = GetCurrentOrg();
 			org_task.Wait();
 			Organization org = org_task.Result;
 			if (org == null) {
@@ -77,7 +74,7 @@ namespace BookMark.Client.Controllers {
 			if (!ModelState.IsValid) {
 				return View(ovm);
 			}
-			Task<Organization> task = FindOrgByEmail(client, ovm.Email);
+			Task<Organization> task = FindOrgByEmail(ovm.Email);
 			task.Wait();
 			Organization org = task.Result;
 			if (org == null) {
@@ -101,14 +98,14 @@ namespace BookMark.Client.Controllers {
 			} else if (ovm.Name.Length == 0) {
 				return View(ovm);
 			}
-			Task<Organization> find_org = FindOrgByEmail(client, ovm.Email);
+			Task<Organization> find_org = FindOrgByEmail(ovm.Email);
 			find_org.Wait();
 			Organization org = find_org.Result;
 			if (org != null) {
 				ViewData["RegErr"] = "Email is already taken!";
 				return View(ovm);
 			}
-			Task<long> find_id = CreateNewOrg(client, ovm.Name, ovm.Email, ovm.Password);
+			Task<long> find_id = CreateNewOrg(ovm.Name, ovm.Email, ovm.Password);
 			find_id.Wait();
 			long ID = find_id.Result;
 			if (ID == 0) {

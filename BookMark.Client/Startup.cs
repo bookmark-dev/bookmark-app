@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using BookMark.Client.Utils;
 
 namespace BookMark.Client {
     public class Startup {
@@ -24,6 +25,7 @@ namespace BookMark.Client {
             services.AddControllersWithViews();
             services.AddHttpClient();
             services.AddHttpContextAccessor();
+            services.AddScoped<HttpService>();
         }
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {
             if (env.IsDevelopment()) {

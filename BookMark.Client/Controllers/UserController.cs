@@ -1,5 +1,4 @@
 // TODO: switch login using email
-using System;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
@@ -12,14 +11,12 @@ using BookMark.Client.Utils;
 
 namespace BookMark.Client.Controllers {
 	public class UserController : Controller {
-		private readonly HttpService service;
-		private readonly HttpClient client;
-		public UserController() {
-			service = HttpService.Service;
-			client = HttpService.Client;
+		private readonly HttpService _service;
+		public UserController(HttpService service) {
+			_service = service;
 		}
-		static public async Task<User> GetCurrentUser(HttpContext context, HttpClient client) {
-			string acct_id = context.Session.GetString("AcctID");
+		private async Task<User> GetCurrentUser() {
+			string acct_id = HttpContext.Session.GetString("AcctID");
 			if (acct_id == null || acct_id.Length == 0) {
 				return null;
 			}
@@ -27,20 +24,20 @@ namespace BookMark.Client.Controllers {
 			if (!long.TryParse(acct_id, out ID)) {
 				return null;
 			}
-			HttpResponseMessage response = await client.GetAsync($"/api/user/{ID}");
+			HttpResponseMessage response = await _service.client.GetAsync($"/api/user/{ID}");
 			if (!response.IsSuccessStatusCode) {
 				return null;
 			}
 			return await response.Content.ReadAsAsync<User>();
 		}
-		static public async Task<User> FindUserByName(HttpClient client, string name) {
-			HttpResponseMessage response = await client.GetAsync($"/api/user/name/{name}");
+		private async Task<User> FindUserByName(string name) {
+			HttpResponseMessage response = await _service.client.GetAsync($"/api/user/name/{name}");
 			if (!response.IsSuccessStatusCode) {
 				return null;
 			}
 			return await response.Content.ReadAsAsync<User>();
 		}
-		static public async Task<long> CreateNewUser(HttpClient client, string name, string password) {
+		private  async Task<long> CreateNewUser(string name, string password) {
 			User user = new User() {
 				Name = name,
 				Password = password
@@ -51,7 +48,7 @@ namespace BookMark.Client.Controllers {
 				Encoding.UTF8, 
 				"application/json"
 			);
-			HttpResponseMessage response = await client.PostAsync("/api/user", content);
+			HttpResponseMessage response = await _service.client.PostAsync("/api/user", content);
 			if (!response.IsSuccessStatusCode) {
 				return 0;
 			}
@@ -59,7 +56,7 @@ namespace BookMark.Client.Controllers {
 		}
 		[HttpGet]
 		public IActionResult Index() {
-			Task<User> user_task = GetCurrentUser(HttpContext, client);
+			Task<User> user_task = GetCurrentUser();
 			user_task.Wait();
 			User user = user_task.Result;
 			if (user == null) {
@@ -76,7 +73,7 @@ namespace BookMark.Client.Controllers {
 			if (!ModelState.IsValid) {
 				return View(uvm);
 			}
-			Task<User> task = FindUserByName(client, uvm.Name);
+			Task<User> task = FindUserByName(uvm.Name);
 			task.Wait();
 			User user = task.Result;
 			if (user == null) {
@@ -98,14 +95,14 @@ namespace BookMark.Client.Controllers {
 			if (!ModelState.IsValid) {
 				return View(uvm);
 			}
-			Task<User> find_user = FindUserByName(client, uvm.Name);
+			Task<User> find_user = FindUserByName(uvm.Name);
 			find_user.Wait();
 			User user = find_user.Result;
 			if (user != null) {
 				ViewData["RegErr"] = "Name is already taken!";
 				return View(uvm);
 			}
-			Task<long> find_id = CreateNewUser(client, uvm.Name, uvm.Password);
+			Task<long> find_id = CreateNewUser(uvm.Name, uvm.Password);
 			find_id.Wait();
 			long ID = find_id.Result;
 			if (ID == 0) {

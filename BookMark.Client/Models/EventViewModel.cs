@@ -18,7 +18,7 @@ namespace BookMark.Client.Models
 		public bool IsPublic { get; set; }
 		// public long OrganizationID { get; set; }
 
-		public Organization Organization { get; set; }
+		public long OrganizationID { get; set; }
 		public List<UserEvent> UserEvents { get; set; }
 
     
@@ -32,7 +32,7 @@ namespace BookMark.Client.Models
       Location = ev.Location;
       Info = ev.Info;
       IsPublic = ev.IsPublic;
-      Organization = ev.Organization;
+      OrganizationID = ev.Organization.OrganizationID;
       UserEvents = ev.UserEvents;
     }
 	}

@@ -1,8 +1,9 @@
-using System;
+using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using BookMark.RestApi.Models;
 using BookMark.Client.Models;
 using BookMark.Client.Utils;
@@ -46,7 +47,12 @@ namespace BookMark.Client.Controllers {
 				Password = password
 			};
 			long UserID = user.UserID;
-			HttpContent content = new StringContent(user.ToString());
+			HttpContent content = new StringContent(
+				JsonConvert.SerializeObject(user), 
+				Encoding.UTF8, 
+				"application/json"
+			);
+			System.Console.WriteLine(content.ToString());
 			HttpResponseMessage response = await client.PostAsync("/api/user", content);
 			if (!response.IsSuccessStatusCode) {
 				return 0;
@@ -72,15 +78,12 @@ namespace BookMark.Client.Controllers {
 			if (!ModelState.IsValid) {
 				return View(uvm);
 			}
-			// Console.WriteLine($"Model = (Name: {uvm.Name}, Password: {uvm.Password})");
 			Task<User> task = FindUserByName(client, uvm.Name);
 			task.Wait();
 			User user = task.Result;
 			if (user == null) {
-				// Console.WriteLine("Couldn't get user!");
 				return View(uvm);
 			}
-			// Console.WriteLine($"Entity = (Name: {user.Name}, Password {user.Password})");
 			if (!user.CheckCredentials(uvm.Password)) {
 				return View(uvm);
 			}

@@ -1,3 +1,4 @@
+// TODO: update with email
 using System.ComponentModel.DataAnnotations;
 using BookMark.RestApi.Models;
 

@@ -8,14 +8,14 @@ namespace BookMark.RestApi.Services {
 		private UserRepository _ur;
 		private AppointmentRepository _ar;
  		private OrganizationRepository _or;
-    	private EventRepository _er;
+    private EventRepository _er;
 		private AppointmentGroupRepository _agr;
 
 		public OrmService(BookMarkDbContext ctx) {
 			_ur = new UserRepository(ctx);
 			_ar = new AppointmentRepository(ctx);
-      		_or = new OrganizationRepository(ctx);
-      		_er = new EventRepository(ctx);
+      _or = new OrganizationRepository(ctx);
+      _er = new EventRepository(ctx);
 			_agr = new AppointmentGroupRepository(ctx);
 		}
 		// ALL
@@ -82,7 +82,7 @@ namespace BookMark.RestApi.Services {
 
     	
 		// For Organization and Event Repos
-    	public List<Organization> AllOrgs() {
+    public List<Organization> AllOrgs() {
 			return _or.All();
 		}
 		public List<Event> AllEvents() {
@@ -117,15 +117,30 @@ namespace BookMark.RestApi.Services {
 			return _er.Delete(ev);
 		}
 		// EXTRA
-		public Organization FindOrgByName(string name) {
-			return _or.FindByName(name);
+		public Organization FindOrgByEmail(string email) {
+			return _or.FindOrgByEmail(email);
 		}
-		public bool CheckOrgExists(string name) {
-			Organization org = this.FindOrgByName(name);
+		public bool CheckOrgExists(string email) {
+			Organization org = this.FindOrgByEmail(email);
 			return org != null;
 		}
-		public bool CheckOrgCredentials(string name, string password) {
-			return _or.CheckCredentials(name, password);
+		public bool CheckOrgCredentials(string email, string password) {
+			return _or.CheckCredentials(email, password);
+		}
+
+		// EXTRA for EventRepo
+		public List<Event> SearchEventByName(string name) 
+		{
+			return _er.SearchByName(name);
+		}
+		// TODO: update when update user email
+		public List<Event> FindEventsByUser(string name) 
+		{
+			return _er.FindByUser(name);
+		}
+		public List<Event> FindEventsByOrg(string email) 
+		{
+			return _er.FindByOrg(email);
 		}
 	}
 }

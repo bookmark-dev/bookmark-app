@@ -1,0 +1,31 @@
+@model List<BookMark.Client.Models.EventViewModel>
+
+<h1>Events</h1>
+
+@if(@Model != null)
+{
+  if(@Model.Any())
+  {
+    <table>
+      <tr>
+        <th>DateTime</th>
+        <th>Event</th>
+      </tr>
+    foreach (var ev in @Model)
+    {
+      <tr>
+        <td>@ev.DateTime</td>
+        <td>@ev.Name</td>
+      </tr>
+    }
+    </table>
+  }
+  else
+  {
+    <p>"No Events"</p>
+  }
+}
+else
+{
+  <p>"Error getting events"</p>
+}

@@ -16,13 +16,18 @@ namespace BookMark.RestApi.Repositories
 			return table
 				.Include(e => e.Organization)
 				.Include(e => e.UserEvents)
-					.ThenInclude(ue => ue.User)
+				.ThenInclude(ue => ue.User)
 				.ToList();
 		}
 		public override Event Get(long ID) 
     {
 			DbSet<Event> table = _ctx.Set<Event>();
-			return table.SingleOrDefault(e => e.EventID == ID);
+      
+		  return table
+        .Include(e => e.Organization)
+        .Include(e => e.UserEvents)
+        .ThenInclude(ue => ue.User)
+        .SingleOrDefault(e => e.EventID == ID);
 		}
     public override bool Post(Event ev) 
     {
@@ -41,10 +46,39 @@ namespace BookMark.RestApi.Repositories
 		}
 
     // to search for event
-		public List<Event> FindByName(string name) 
+		public List<Event> SearchByName(string name) 
     {
 			DbSet<Event> table = _ctx.Set<Event>();
-			IQueryable<Event> query = table.Where(e => e.Name.Contains(name));
+			IQueryable<Event> query = table.Where(e => e.Name.Contains(name))
+				.Include(e => e.Organization)
+				.Include(e => e.UserEvents)
+				.ThenInclude(ue => ue.User);
+			if (query.Count() == 0) {
+				return null;
+			}
+			return query.ToList();
+		}
+
+		// TODO: update when update user email
+		public List<Event> FindByUser(string name) 
+    {
+			DbSet<Event> table = _ctx.Set<Event>();
+			IQueryable<Event> query = table.Where(e => e.UserEvents.User.Name.Equals(name))
+				.Include(e => e.Organization)
+				.Include(e => e.UserEvents)
+				.ThenInclude(ue => ue.User);
+			if (query.Count() == 0) {
+				return null;
+			}
+			return query.ToList();
+		}
+		public List<Event> FindByOrg(string email) 
+    {
+			DbSet<Event> table = _ctx.Set<Event>();
+			IQueryable<Event> query = table.Where(e => e.Organization.Email.Equals(email))
+				.Include(e => e.Organization)
+				.Include(e => e.UserEvents)
+				.ThenInclude(ue => ue.User);
 			if (query.Count() == 0) {
 				return null;
 			}

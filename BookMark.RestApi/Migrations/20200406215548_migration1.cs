@@ -118,14 +118,14 @@ namespace BookMark.RestApi.Migrations
                 {
                     table.PrimaryKey("PK_UserEvents", x => x.UserEventID);
                     table.ForeignKey(
-                        name: "FK_UserEvents_Events_EventID",
-                        column: x => x.EventID,
+                        name: "FK_UserEvents_Events_UserEventID",
+                        column: x => x.UserEventID,
                         principalTable: "Events",
                         principalColumn: "EventID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_UserEvents_Users_UserID",
-                        column: x => x.UserID,
+                        name: "FK_UserEvents_Users_UserEventID",
+                        column: x => x.UserEventID,
                         principalTable: "Users",
                         principalColumn: "UserID",
                         onDelete: ReferentialAction.Cascade);
@@ -134,17 +134,17 @@ namespace BookMark.RestApi.Migrations
             migrationBuilder.InsertData(
                 table: "Organizations",
                 columns: new[] { "OrganizationID", "Email", "Name", "Password" },
-                values: new object[] { 637217236056207360L, "Revature@Mail.com ", "Revature", "$2a$11$f.SS4iM9q.RRSJzGYm1emu0TyDceyUt.NLv7OBRwtAR4ynxtyPuBW" });
+                values: new object[] { 637217889481259457L, "Revature@Mail.com", "Revature", "$2a$11$zIi.pmS/ajWJYGgcXlK.4ebCoyxwDw15XWJv2j6FSEL6.IR9NcU56" });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserID", "Email", "Name", "Password" },
-                values: new object[] { 1L, null, "synaodev", "$2a$11$mqXBGU7ik.eCMMm2k0bVvuGTLNtLJcTW3sn1AXeSngHAdve32vQ5u" });
+                values: new object[] { 1L, null, "synaodev", "$2a$11$RO/C4HsZcEx.wSpk2TQxRe21eC3JvwgQxhgUHH9vdvIE6XUenZF7a" });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserID", "Email", "Name", "Password" },
-                values: new object[] { 2L, null, "Adrienne", "$2a$11$8Qbre2OOWWEm7bcrlqXPtOzpoTyyAY5IlwMsulDf9JssvLyzXtbta" });
+                values: new object[] { 2L, null, "Adrienne", "$2a$11$A81w4peyljR3nUkL9xZrA.Ikl5lMry1G62QIs/M4Te.7mKvqerH4G" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppointmentGroups_OrganizationID",
@@ -155,16 +155,6 @@ namespace BookMark.RestApi.Migrations
                 name: "IX_Appointments_AppointmentGroupID",
                 table: "Appointments",
                 column: "AppointmentGroupID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserEvents_EventID",
-                table: "UserEvents",
-                column: "EventID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserEvents_UserID",
-                table: "UserEvents",
-                column: "UserID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

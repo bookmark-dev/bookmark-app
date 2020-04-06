@@ -124,7 +124,8 @@ namespace BookMark.Client.Controllers {
 				Location = location,
 				DateTime = datetime,
 				Info = info,
-				Organization = org
+				// Organization = org
+				OrganizationID = org.OrganizationID
 			};
 			long EventID = ev.EventID;
 			HttpContent content = new StringContent(

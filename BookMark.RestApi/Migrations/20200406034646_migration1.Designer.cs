@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookMark.RestApi.Migrations
 {
     [DbContext(typeof(BookMarkDbContext))]
-    [Migration("20200405225957_migration1")]
+    [Migration("20200406034646_migration1")]
     partial class migration1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -118,9 +118,10 @@ namespace BookMark.RestApi.Migrations
                     b.HasData(
                         new
                         {
-                            OrganizationID = 637217063973851999L,
+                            OrganizationID = 637217236056207360L,
+                            Email = "Revature@Mail.com ",
                             Name = "Revature",
-                            Password = "$2a$11$9.BEjJnNqMKe19Q561O/nOFOhcCXkFurz/M95Y4dEzrO4T2.0g9Mu"
+                            Password = "$2a$11$f.SS4iM9q.RRSJzGYm1emu0TyDceyUt.NLv7OBRwtAR4ynxtyPuBW"
                         });
                 });
 
@@ -147,13 +148,13 @@ namespace BookMark.RestApi.Migrations
                         {
                             UserID = 1L,
                             Name = "synaodev",
-                            Password = "$2a$11$HbMFHGjY6REjepNM/ZccQe5WFk2cSRak5Imhs6WTCRlCuCzlPXGeC"
+                            Password = "$2a$11$mqXBGU7ik.eCMMm2k0bVvuGTLNtLJcTW3sn1AXeSngHAdve32vQ5u"
                         },
                         new
                         {
                             UserID = 2L,
                             Name = "Adrienne",
-                            Password = "$2a$11$rTUGNHO4ISi5vrhtzBr.ru7INz9X3pzt1oXlsvKFdURwEtxGPSVf."
+                            Password = "$2a$11$8Qbre2OOWWEm7bcrlqXPtOzpoTyyAY5IlwMsulDf9JssvLyzXtbta"
                         });
                 });
 

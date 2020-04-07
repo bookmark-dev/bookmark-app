@@ -136,9 +136,9 @@ namespace BookMark.Client.Controllers {
 				"application/json"
 			);
 			HttpResponseMessage response = await _service.client.PostAsync("/api/event", content);
-			if (!response.IsSuccessStatusCode) {
+			/*if (!response.IsSuccessStatusCode) {
 				return 0;
-			}
+			}*/
 			return EventID;
 		}		
 	}

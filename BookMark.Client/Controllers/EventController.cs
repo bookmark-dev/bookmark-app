@@ -219,7 +219,8 @@ namespace BookMark.Client.Controllers {
 
 		private async Task<Event> GetEvent(long id) 
 		{
-			HttpResponseMessage response = await _service.client.GetAsync($"/api/event/{id}");
+			string idstring = id.ToString();
+			HttpResponseMessage response = await _service.client.GetAsync($"/api/event/{idstring}");
 			if (!response.IsSuccessStatusCode) {
 				return null;
 			}

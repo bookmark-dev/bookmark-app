@@ -96,7 +96,7 @@ namespace BookMark.Client.Controllers {
 		}
     	[HttpGet]
 		public IActionResult Create() {
-			return View();
+			return View(new EventViewModel());
 		}
 		[HttpPost]
 		public IActionResult Create(EventViewModel model) {
@@ -128,8 +128,10 @@ namespace BookMark.Client.Controllers {
 				OrganizationID = org.OrganizationID
 			};
 			long EventID = ev.EventID;
+			string serial = JsonConvert.SerializeObject(ev);
+			System.Console.WriteLine(serial);
 			HttpContent content = new StringContent(
-				JsonConvert.SerializeObject(ev),
+				serial,
 				Encoding.UTF8,
 				"application/json"
 			);

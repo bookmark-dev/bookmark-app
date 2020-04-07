@@ -22,7 +22,11 @@ namespace BookMark.RestApi.Repositories {
 		public override Organization Get(long ID) 
     	{
 			DbSet<Organization> table = _ctx.Set<Organization>();
-			return table.SingleOrDefault(o => o.OrganizationID.Equals(ID));
+			return table
+					.Include(o => o.Events)
+					.Include(o => o.AppointmentGroups)
+					.ThenInclude(ag => ag.Appointments)
+					.SingleOrDefault(o => o.OrganizationID.Equals(ID));
 		}
 		public override bool Post(Organization org) 
     	{

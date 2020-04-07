@@ -66,7 +66,7 @@ namespace BookMark.Client.Controllers {
 		}
 		[HttpGet]
 		public IActionResult Login() {
-			return View();
+			return View(new UserViewModel());
 		}
 		[HttpPost]
 		public IActionResult Login(UserViewModel uvm) {
@@ -87,7 +87,7 @@ namespace BookMark.Client.Controllers {
 		}
 		[HttpGet]
 		public IActionResult Register() {
-			return View();
+			return View(new UserViewModel());
 		}
 		[HttpPost]
 		public IActionResult Register(UserViewModel uvm) {

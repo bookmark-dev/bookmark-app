@@ -134,17 +134,17 @@ namespace BookMark.RestApi.Migrations
             migrationBuilder.InsertData(
                 table: "Organizations",
                 columns: new[] { "OrganizationID", "Email", "Name", "Password" },
-                values: new object[] { 637217889481259457L, "Revature@Mail.com", "Revature", "$2a$11$zIi.pmS/ajWJYGgcXlK.4ebCoyxwDw15XWJv2j6FSEL6.IR9NcU56" });
+                values: new object[] { 1L, "Revature@Mail.com", "Revature", "$2a$11$30ZdgvIkflyjDHSFFg.Hhe4SUOHyRqh1OGKpYZ0C5qaiA5Ettd5Y2" });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserID", "Email", "Name", "Password" },
-                values: new object[] { 1L, null, "synaodev", "$2a$11$RO/C4HsZcEx.wSpk2TQxRe21eC3JvwgQxhgUHH9vdvIE6XUenZF7a" });
+                values: new object[] { 1L, null, "synaodev", "$2a$11$k8VA0ZpgAqOp0l73wsXRm.OVZlblHYaVYcCYMjAlxzrwc9OrNQig2" });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserID", "Email", "Name", "Password" },
-                values: new object[] { 2L, null, "Adrienne", "$2a$11$A81w4peyljR3nUkL9xZrA.Ikl5lMry1G62QIs/M4Te.7mKvqerH4G" });
+                values: new object[] { 2L, null, "Adrienne", "$2a$11$yeii7KdJRToDe1JkmDILiuOCepm7osi1A78LZ2oSlrfXyWi6RvFVa" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppointmentGroups_OrganizationID",

@@ -62,7 +62,7 @@ namespace BookMark.RestApi.Databases {
 			builder.Entity<User>().HasData(users);
 			
 			Organization[] org = new Organization[] {
-				new Organization() { Email = "Revature@Mail.com", Name = "Revature", Password = BCrypt.Net.BCrypt.HashPassword("Revature") }
+				new Organization() { OrganizationID = 1, Email = "Revature@Mail.com", Name = "Revature", Password = BCrypt.Net.BCrypt.HashPassword("Revature") }
 			};
 			builder.Entity<Organization>().HasData(org);
 		}

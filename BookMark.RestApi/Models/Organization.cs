@@ -24,5 +24,8 @@ namespace BookMark.RestApi.Models {
 		public bool CheckCredentials(string password) {
 			return BCrypt.Net.BCrypt.Verify(password, this.Password);
 		}
+		public override string ToString() {
+			return $"Organization: {OrganizationID}\n{Name}\n{Email}\n{Password}";
+		} 
 	}
 }

@@ -1,0 +1,17 @@
+{
+  "name": "bookmark.angular",
+  "version": "1.0.0",
+  "description": "Angular Front-End for BookMark-WebApp",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon index.js",
+    "ng": "ng"
+  },
+  "author": "BookMark Development Team",
+  "license": "MIT",
+  "dependencies": {
+    "@angular/cli": "^9.1.0",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.2"
+  }
+}

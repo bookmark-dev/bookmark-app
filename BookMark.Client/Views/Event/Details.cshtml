@@ -1,6 +1,6 @@
 @model BookMark.Client.Models.EventViewModel
 
-@if (@ModelBinderAttribute != null)
+@if (@Model != null)
 {
   <h1>@Model.Name</h1>
 
@@ -12,7 +12,7 @@
   
   <p>Event Information: @Model.Info</p>
 
-  if@(@Model.UserEvents != null)
+  @if(@Model.UserEvents != null)
   {
     <p>RSVPs: @Model.UserEvents.Count()</p>
   }

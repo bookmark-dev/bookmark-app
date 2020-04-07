@@ -72,8 +72,8 @@ namespace BookMark.RestApi.Controllers
 				//Organization org = _srv.GetOrg(model.OrganizationID);
 				//org.Events.Add(model);
 				System.Console.WriteLine(model);
-				Organization org = _srv.GetOrg(model.OrganizationID);
-				System.Console.Write(org);
+				// Organization org = _srv.GetOrg(model.OrganizationID);
+				// System.Console.Write(org);
 				if (_srv.PostEvent(model)) {
 					// FIXME: return ev for confirmation page or nothing?
 					return Ok(model);

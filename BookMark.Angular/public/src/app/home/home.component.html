@@ -1,0 +1,17 @@
+<div *ngIf="flash">
+	<h3>Error!</h3>
+	<h4 *ngFor="let message of messages">{{ messages }}</h4>
+	<hr>
+</div>
+<p>Login:</p>
+<form (submit)="loginUser()">
+	<input type="text" [(ngModel)]="uvm.Name" [ngModelOptions]="{standalone: true}">
+	<input type="text" [(ngModel)]="uvm.Password" [ngModelOptions]="{standalone: true}">
+	<input type="submit" value="Login!">
+</form>
+<p>Register:</p>
+<form (submit)="registerUser()">
+	<input type="text" [(ngModel)]="uvm.Name" [ngModelOptions]="{standalone: true}">
+	<input type="text" [(ngModel)]="uvm.Password" [ngModelOptions]="{standalone: true}">
+	<input type="submit" value="Register!">
+</form>

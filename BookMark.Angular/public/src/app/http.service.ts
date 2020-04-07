@@ -7,16 +7,27 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class HttpService {
-  constructor(private _http: HttpClient, private _url: string) {
+  _url: string;
+  constructor(private _http: HttpClient) {
     this._url = env['RestApiUrl'];
     if (this._url.length == 0) {
       this._url = 'https://localhost:5001';
     }
   }
-  getOrganization(id: string) {
-    return this._http.get(`${this._url}/api/org/${id}`);
-  }
   getUser(id: string) {
     return this._http.get(`${this._url}/api/user/${id}`);
+  }
+  getUserFromName(name: string) {
+    return this._http.get(`${this._url}/api/user/name/${name}`);
+  }
+  postUser(name: string, password: string) {
+    return this._http.post(`${this._url}/api/user`, 
+      { Name: name, Password: password }
+    );
+  }
+  comparePassword(password: string, hashed: string) {
+    return this._http.post(`${this._url}/api/compare`,
+      { password: password, hashed: hashed }
+    );
   }
 }

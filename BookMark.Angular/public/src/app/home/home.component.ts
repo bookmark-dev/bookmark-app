@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, Params } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpService } from '../http.service';
 
 function AccountModel() {
@@ -10,17 +10,11 @@ function AccountModel() {
   };
 }
 
-interface ErrorMessage {
-  message: string,
-  name: string,
-  kind: string,
-  path: string,
-  value: string,
-  properties: any
-};
-
-function generateErrorMessages(errors): Array<string> {
+function generateErrorMessages(errors: any): Array<string> {
   let result: Array<string> = [];
+  errors.array.forEach(e => {
+    result.push(e);
+  });
   return result;
 }
 
@@ -46,32 +40,40 @@ export class HomeComponent implements OnInit {
     this.flash = false;
   }
   loginUser() {
-    let user_task = this._http.getUserFromName(this.uvm_login.Name);
-    user_task.subscribe(data => {
-      if (data.hasOwnProperty('errors')) {
+    this.messages = [];
+    this._http.getUserFromName(this.uvm_login.Name).subscribe(user_data => {
+      if (!user_data.hasOwnProperty('password')) {
         this.uvm_login = AccountModel();
-        this.messages = generateErrorMessages(data['errors']);
-        this.flash = true;
+        this.messages = generateErrorMessages(user_data);
       } else {
-        let result_task = this._http.comparePassword(this.uvm_login.Password, data['Password']);
+        let result_task = this._http.comparePassword(this.uvm_login.Password, user_data['password']);
         result_task.subscribe(data => {
-          if (data.hasOwnProperty('result')) {
-            let result: boolean = data['result'];
-            if (result == true) {
-              this.uvm_login = AccountModel();
-              this.messages = [];
-              this.flash = false;
-              this._router.navigate(['account', data['UserID']]);
-            }
+          this.uvm_login = AccountModel();
+          this.messages = [];
+          if (data == true) {  
+            this._router.navigate(['account', user_data['userID']]);
+          } else {
+            this._router.navigate(['home']);
           }
         });
       }
     });
+    this.flash = this.messages.length > 0;
   }
   registerUser() {
-    this._http.postUser(this.uvm_register.Name, this.uvm_register.Password).subscribe(data => {
-      console.log(data);
-      this._router.navigate(['home']);
-    });
+    this.messages = [];
+    if (this.uvm_register.Name.length == 0) {
+      this.messages.push('Name shouldn\'t be empty!');
+    } else if (this.uvm_register.Email.length == 0) {
+      this.messages.push('Email shouldn\'t be empty!');
+    } else if (this.uvm_register.Password.length == 0) {
+      this.messages.push('Password shouldn\'t be empty!'); 
+    } else {
+      this._http.postUser(this.uvm_register.Name, this.uvm_register.Password).subscribe(data => {
+        console.log(data);
+        this._router.navigate(['home']);
+      });
+    }
+    this.flash = this.messages.length > 0;
   }
 }

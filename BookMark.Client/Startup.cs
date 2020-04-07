@@ -34,7 +34,7 @@ namespace BookMark.Client {
                 app.UseExceptionHandler("/home/error");
                 app.UseHsts();
             }
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSession();
             app.UseRouting();

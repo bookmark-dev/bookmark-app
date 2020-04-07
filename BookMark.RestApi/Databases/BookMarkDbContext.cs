@@ -57,8 +57,8 @@ namespace BookMark.RestApi.Databases {
 			
 			// Seed Data
 			User[] users = new User[] {
-				new User() { UserID = 1, Name = "synaodev", Password = BCrypt.Net.BCrypt.HashPassword("tylercadena") },
-				new User() { UserID = 2, Name = "adrienne", Password = BCrypt.Net.BCrypt.HashPassword("Sparkman") }
+				new User() { UserID = 1, Name = "synaodev", Email = "tylercadena@alum.calarts.edu", Password = BCrypt.Net.BCrypt.HashPassword("tylercadena") },
+				new User() { UserID = 2, Name = "adrienne", Email = "adrienne-sparkman@gmail.com", Password = BCrypt.Net.BCrypt.HashPassword("Sparkman") }
 			};
 			builder.Entity<User>().HasData(users);
 			

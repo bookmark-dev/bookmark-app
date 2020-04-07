@@ -134,17 +134,17 @@ namespace BookMark.RestApi.Migrations
             migrationBuilder.InsertData(
                 table: "Organizations",
                 columns: new[] { "OrganizationID", "Email", "Name", "Password" },
-                values: new object[] { 1L, "Revature@Mail.com", "Revature", "$2a$11$H.Sh12upMvTDIaE5k3w/pu3IfMllA90gaOefks7KmZWWVtRXs27Da" });
+                values: new object[] { 1L, "revature@mail.com", "revature", "$2a$11$DR63GSNJooZlE3EHIe40OOyvSqb2EnSRgnMUVVp9TnOqITUbBY7VG" });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserID", "Email", "Name", "Password" },
-                values: new object[] { 1L, null, "synaodev", "$2a$11$gdpxkMUHwW29iGaluiT6MObi4e/InJ5r/yPnUpu75t8Bkc1CNAZUS" });
+                values: new object[] { 1L, "tylercadena@alum.calarts.edu", "synaodev", "$2a$11$BZFLFLGM.jm213yXKI6NT.Bv3m4ti1VkaSiG/5RKR0JFXVpGUE/Um" });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "UserID", "Email", "Name", "Password" },
-                values: new object[] { 2L, null, "Adrienne", "$2a$11$V6m0HDTkQuPy2315iMGNm.VrV9KykKI0qbE4S5V0DBI0riVntnjty" });
+                values: new object[] { 2L, "adrienne-sparkman@gmail.com", "adrienne", "$2a$11$FdMGlzdyHiKCjeoVO/4ZnesWyvOfHgktffZSwHx4I//eZLNWfXhH." });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AppointmentGroups_OrganizationID",

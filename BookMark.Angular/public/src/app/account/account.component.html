@@ -1,1 +1,10 @@
-<p>account works!</p>
+<div *ngIf="flash">
+	<h3>Error!</h3>
+	<h4 *ngFor="let message of messages">{{ messages }}</h4>
+	<hr>
+</div>
+<div *ngIf="!flash">
+	<p>Name: {{ acct_display.Name }}</p>
+	<p>Email: {{ acct_display.Email }}</p>
+	<p>Password: {{ acct_display.Password }}</p>
+</div>

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookMark.RestApi.Migrations
 {
     [DbContext(typeof(BookMarkDbContext))]
-    [Migration("20200407002447_migration1")]
+    [Migration("20200407090818_migration1")]
     partial class migration1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -123,9 +123,9 @@ namespace BookMark.RestApi.Migrations
                         new
                         {
                             OrganizationID = 1L,
-                            Email = "Revature@Mail.com",
-                            Name = "Revature",
-                            Password = "$2a$11$H.Sh12upMvTDIaE5k3w/pu3IfMllA90gaOefks7KmZWWVtRXs27Da"
+                            Email = "revature@mail.com",
+                            Name = "revature",
+                            Password = "$2a$11$DR63GSNJooZlE3EHIe40OOyvSqb2EnSRgnMUVVp9TnOqITUbBY7VG"
                         });
                 });
 
@@ -151,14 +151,16 @@ namespace BookMark.RestApi.Migrations
                         new
                         {
                             UserID = 1L,
+                            Email = "tylercadena@alum.calarts.edu",
                             Name = "synaodev",
-                            Password = "$2a$11$gdpxkMUHwW29iGaluiT6MObi4e/InJ5r/yPnUpu75t8Bkc1CNAZUS"
+                            Password = "$2a$11$BZFLFLGM.jm213yXKI6NT.Bv3m4ti1VkaSiG/5RKR0JFXVpGUE/Um"
                         },
                         new
                         {
                             UserID = 2L,
-                            Name = "Adrienne",
-                            Password = "$2a$11$V6m0HDTkQuPy2315iMGNm.VrV9KykKI0qbE4S5V0DBI0riVntnjty"
+                            Email = "adrienne-sparkman@gmail.com",
+                            Name = "adrienne",
+                            Password = "$2a$11$FdMGlzdyHiKCjeoVO/4ZnesWyvOfHgktffZSwHx4I//eZLNWfXhH."
                         });
                 });
 

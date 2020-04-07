@@ -50,9 +50,9 @@ namespace BookMark.RestApi {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
-            app.UseCors(MyAllowSpecificOrigins);
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseAuthorization();
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();

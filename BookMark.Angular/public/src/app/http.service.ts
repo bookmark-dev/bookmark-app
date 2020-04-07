@@ -28,7 +28,7 @@ export class HttpService {
   }
   comparePassword(password: string, hashed: string) {
     return this._http.post(`${this._url}/api/compare`,
-      { password: password, hashed: hashed }
+      { Password: password, Hashed: hashed }
     );
   }
 }

@@ -18,7 +18,7 @@ namespace BookMark.Client.Utils {
 			if (client == null) {
 				string base_url = Environment.GetEnvironmentVariable("RestApiUrl");
 				if (base_url == null) {
-					base_url = "https://localhost:5001";
+					base_url = "http://localhost:5000";
 				}
 				client = new HttpClient(handler);
 				client.BaseAddress = new Uri(base_url);

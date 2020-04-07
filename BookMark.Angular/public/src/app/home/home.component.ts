@@ -30,7 +30,8 @@ function generateErrorMessages(errors): Array<string> {
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  uvm: any;
+  uvm_login: any;
+  uvm_register: any;
   messages: Array<string>;
   flash: boolean;
   constructor(
@@ -39,24 +40,25 @@ export class HomeComponent implements OnInit {
     private _router: Router
   ) {}
   ngOnInit(): void {
-    this.uvm = AccountModel();
+    this.uvm_login = AccountModel();
+    this.uvm_register = AccountModel();
     this.messages = [];
     this.flash = false;
   }
   loginUser() {
-    let user_task = this._http.getUserFromName(this.uvm.Name);
+    let user_task = this._http.getUserFromName(this.uvm_login.Name);
     user_task.subscribe(data => {
       if (data.hasOwnProperty('errors')) {
-        this.uvm = AccountModel();
+        this.uvm_login = AccountModel();
         this.messages = generateErrorMessages(data['errors']);
         this.flash = true;
       } else {
-        let result_task = this._http.comparePassword(this.uvm.Password, data['Password']);
+        let result_task = this._http.comparePassword(this.uvm_login.Password, data['Password']);
         result_task.subscribe(data => {
           if (data.hasOwnProperty('result')) {
             let result: boolean = data['result'];
             if (result == true) {
-              this.uvm = AccountModel();
+              this.uvm_login = AccountModel();
               this.messages = [];
               this.flash = false;
               this._router.navigate(['account', data['UserID']]);
@@ -67,7 +69,7 @@ export class HomeComponent implements OnInit {
     });
   }
   registerUser() {
-    this._http.postUser(this.uvm['Name'], this.uvm['Password']).subscribe(data => {
+    this._http.postUser(this.uvm_register.Name, this.uvm_register.Password).subscribe(data => {
       console.log(data);
       this._router.navigate(['home']);
     });

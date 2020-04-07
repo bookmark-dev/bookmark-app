@@ -17,13 +17,21 @@ using BookMark.RestApi.Services;
 
 namespace BookMark.RestApi {
     public class Startup {
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public Startup(IConfiguration configuration) {
             Configuration = configuration;
         }
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services) {
             string base_url = Environment.GetEnvironmentVariable("RestApiUrl");
-            services.AddCors();
+            services.AddCors(options => {
+                options.AddPolicy(
+                    MyAllowSpecificOrigins,
+                    builder => {
+                        builder.SetIsOriginAllowedToAllowWildcardSubdomains();
+                        builder.SetIsOriginAllowed(s => s.Length > 0);
+                    });
+            });
             services.AddControllers();
             services.AddDbContext<BookMarkDbContext>(options => {
                 options.UseSqlServer(Configuration.GetConnectionString(base_url == null ? "local" : "docker"));
@@ -41,7 +49,7 @@ namespace BookMark.RestApi {
             }
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseCors();
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseAuthorization();
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();

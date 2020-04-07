@@ -10,7 +10,7 @@ export class HttpService {
   _url: string;
   constructor(private _http: HttpClient) {
     this._url = env['RestApiUrl'];
-    if (this._url.length == 0) {
+    if (this._url == undefined) {
       this._url = 'https://localhost:5001';
     }
   }

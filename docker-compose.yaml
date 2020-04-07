@@ -28,6 +28,7 @@ services:
     image: bookmarks.azurecr.io/bookmark-restapi
     environment: 
       RestApiUrl: "http://restapi"
+      ASPNETCORE_ENVIRONMENT: "development"
     expose:
       - 5000
     ports:
@@ -45,6 +46,7 @@ services:
     image: bookmarks.azurecr.io/bookmark-client
     environment: 
       RestApiUrl: "http://restapi"
+      ASPNETCORE_ENVIRONMENT: "development"
     ports:
       - 8000:80
     networks:

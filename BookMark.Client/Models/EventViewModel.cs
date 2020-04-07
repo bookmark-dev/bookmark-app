@@ -34,7 +34,7 @@ namespace BookMark.Client.Models
       Location = ev.Location;
       Info = ev.Info;
       IsPublic = ev.IsPublic;
-      OrganizationID = ev.Organization.OrganizationID;
+      //OrganizationID = ev.Organization.OrganizationID;
       UserEvents = ev.UserEvents;
       //Organization = ev.Organization;
     }

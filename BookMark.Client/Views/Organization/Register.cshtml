@@ -10,9 +10,8 @@
 	<input type="text" asp-for="@Model.Name" placeholder = "Organization Name">
 	@Html.ValidationMessageFor(ovm => ovm.Name)
   <br />
-  @Html.AntiForgeryToken()
 	<label asp-for="@Model.Email">Email</label>
-	<input type="text" asp-for="@Model.Email" placeholder = "Email">
+	<input type="email" asp-for="@Model.Email" placeholder = "Email">
 	@Html.ValidationMessageFor(ovm => ovm.Email)
   <br/>
 	<label asp-for="@Model.Password">Password</label>

@@ -346,7 +346,7 @@ namespace BookMark.Client.Controllers {
 				Location = location,
 				DateTime = datetime,
 				Info = info,
-				// Organization = org
+				// Organization = org,
 				OrganizationID = org.OrganizationID
 			};
 			long EventID = ev.EventID;
@@ -358,9 +358,11 @@ namespace BookMark.Client.Controllers {
 				"application/json"
 			);
 			HttpResponseMessage response = await _service.client.PostAsync("/api/event", content);
-			/*if (!response.IsSuccessStatusCode) {
+			//TODO: ?
+
+			if (!response.IsSuccessStatusCode) {
 				return 0;
-			}*/
+			}
 			return EventID;
 		}
 		// TODO: TEST
@@ -373,7 +375,7 @@ namespace BookMark.Client.Controllers {
 
 			return View(new EventViewModel(ev));
 		}
-		// TODO: TEST
+		// FIXME: PASS ID AS LONG?
 		private async Task<Event> GetEvent(long id) 
 		{
 			string idstring = id.ToString();

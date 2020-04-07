@@ -40,7 +40,7 @@ namespace BookMark.Client.Controllers {
 		private async Task<long> CreateNewOrg(string name, string email, string password) {
 			Organization org = new Organization() {
 				Name = name,
-        		Email = email,
+        Email = email,
 				Password = password
 			};
 			long OrgID = org.OrganizationID;
@@ -120,7 +120,7 @@ namespace BookMark.Client.Controllers {
 		}
 		[HttpGet]
 		public IActionResult Register() {
-			return View();
+			return View(new OrganizationViewModel());
 		}
 		[HttpPost]
 		public IActionResult Register(OrganizationViewModel ovm) {
@@ -131,7 +131,8 @@ namespace BookMark.Client.Controllers {
 			ovm.Email=ovm.Email.ToLower().Replace(" ","");
 			// FIXME: 
 			ovm.Password = ovm.Password.Replace(" ","");
-			if (ovm.Name.Length == 0 || ovm.Password.Length < 6) {
+			if (ovm.Name.Length == 0 || ovm.Password.Length < 6) 
+			{
 				return View(ovm);
 			}
 
@@ -160,7 +161,7 @@ namespace BookMark.Client.Controllers {
 			return View();
 		}
 
-		[HttpPut]
+		[HttpPost]
 		public IActionResult UpdateInfo(OrganizationViewModel ovm)
 		{
 			ViewData["RegErr"] = "";

@@ -62,7 +62,8 @@ namespace BookMark.RestApi.Controllers {
 					Organization org = new Organization() 
           			{
 						Name = model.Name,
-						Password = model.Password
+						Password = model.Password,
+						Email = model.Email
 					};
 					if (_srv.PostOrg(org)) 
           			{

@@ -99,7 +99,7 @@ namespace BookMark.Client.Controllers {
 			uvm.Password = uvm.Password.Replace(" ","");
 			if (uvm.Name.Length == 0 || uvm.Password.Length < 6)
 			{
-
+				return View(uvm);
 			}
 			Task<User> find_user = FindUserByName(uvm.Name);
 			find_user.Wait();

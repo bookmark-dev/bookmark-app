@@ -4,7 +4,7 @@
 
 <p>@ViewData["RegErr"]</p>
 
-<form action="/organization/updateinfo" method="PUT">
+<form action="/organization/updateinfo" method="post">
 	@Html.AntiForgeryToken()
 	<label asp-for="@Model.Name">Name</label>
 	<input type="text" asp-for="@Model.Name">
@@ -22,5 +22,5 @@
 	@Html.ValidationMessageFor(ovm => ovm.Password)
   <br/>
 	
-  <button type="submit">Register</button>
+  <button type="submit">Update</button>
 </form>

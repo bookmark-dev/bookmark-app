@@ -21,6 +21,8 @@ namespace BookMark.Client.Models
 		public long OrganizationID { get; set; }
 		public List<UserEvent> UserEvents { get; set; }
 
+    // FIXME: maybe 
+    public Organization Organization { get; set; }
     
 		public EventViewModel() {}
 
@@ -34,6 +36,7 @@ namespace BookMark.Client.Models
       IsPublic = ev.IsPublic;
       OrganizationID = ev.Organization.OrganizationID;
       UserEvents = ev.UserEvents;
+      Organization = ev.Organization;
     }
 	}
 }

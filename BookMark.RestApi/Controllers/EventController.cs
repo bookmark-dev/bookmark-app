@@ -90,10 +90,10 @@ namespace BookMark.RestApi.Controllers
 				if (_srv.GetEvent(model.EventID) != null) 
 				{
 					Event UpdatedEvent = model;
-					UpdatedEvent.Name = model.Name;
-					UpdatedEvent.DateTime = model.DateTime;
-					UpdatedEvent.Location = model.Location;
-					UpdatedEvent.Info = model.Info;
+					// UpdatedEvent.Name = model.Name;
+					// UpdatedEvent.DateTime = model.DateTime;
+					// UpdatedEvent.Location = model.Location;
+					// UpdatedEvent.Info = model.Info;
 
 					if (_srv.PutEvent(UpdatedEvent)) 
 					{

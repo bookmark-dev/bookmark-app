@@ -78,13 +78,15 @@ namespace BookMark.RestApi.Controllers {
 		public IActionResult Put(Organization model) {
 			if (ModelState.IsValid) {
 				if (_srv.CheckOrgExists(model.Name)) {
-					Organization org = new Organization() 
-          {
-						OrganizationID = model.OrganizationID,
-						Name = model.Name,
-						Password = model.Password
-					};
-					if (_srv.PutOrg(org)) {
+					Organization newOrganization = model;
+					
+					// Organization org = new Organization() 
+          // {
+					// 	OrganizationID = model.OrganizationID,
+					// 	Name = model.Name,
+					// 	Password = model.Password
+					// };
+					if (_srv.PutOrg(newOrganization)) {
 						return Ok();
 					}
 					return BadRequest("Putting organization failed!");

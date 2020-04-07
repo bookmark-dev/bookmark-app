@@ -4,8 +4,6 @@
 {
   <h1>@Model.Name</h1>
 
-  <p>Event Name: @Model.Name</p>
-
   @if(@Model.Organization != null)
   {
     <p>Event Organizer: @Model.Organization.Name</p>
@@ -21,10 +19,12 @@
   {
     <p>RSVPs: @Model.UserEvents.Count()</p>
   }
+
+  @Html.ActionLink("RSVP", "RSVPConfirmation", new { id = @Model.EventID })
 }
 else
 {
   <p>Error</p>
 }
 <br/><br/>
-@Html.ActionLink("Back", "Back")
+<a href="/event/index">Back</a>

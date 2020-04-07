@@ -8,7 +8,7 @@ namespace BookMark.RestApi.Models {
 
 		#region NAVIGATIONAL PROPERTIES
 		public User User { get; set; }
-    	public Event Event { get; set; }
+    public Event Event { get; set; }
 		#endregion // NAVIGATIONAL PROPERTIES
 
 		public UserEvent() {

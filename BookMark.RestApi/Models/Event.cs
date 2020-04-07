@@ -27,5 +27,15 @@ namespace BookMark.RestApi.Models {
 		public override string ToString() {
 			return $"Event: {EventID}\n{Name}\n{DateTime}\n{Location}\n{Info}\n{IsPublic}\n{OrganizationID}";
 		}
+
+		public Event(long id, string name, string info, DateTime datetime, string location, Organization org)
+		{
+			EventID = id;
+			Name = name;
+			DateTime = datetime;
+			Info = info;
+			Location = location;
+			Organization = org;
+		}
 	}
 }

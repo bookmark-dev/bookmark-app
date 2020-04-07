@@ -72,10 +72,15 @@ namespace BookMark.RestApi.Controllers
 				//Organization org = _srv.GetOrg(model.OrganizationID);
 				//org.Events.Add(model);
 				System.Console.WriteLine(model);
-				// Organization org = _srv.GetOrg(model.OrganizationID);
+				//FIXME: remove org id?
+				Organization org = _srv.GetOrg(model.OrganizationID);
+				model.Organization = org;
+				Event postevent = new Event(model.EventID, model.Name, model.Info, model.DateTime, model.Location, org);
+				
 				// System.Console.Write(org);
-				if (_srv.PostEvent(model)) {
-					// FIXME: return ev for confirmation page or nothing?
+				if (_srv.PostEvent(postevent)) {
+					// FIXME: remove org before passing back (for recurssion error))
+					// return ev for confirmation page or nothing?
 					return Ok(model);
 				}
 				return BadRequest("Creating event failed!");

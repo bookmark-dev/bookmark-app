@@ -347,7 +347,9 @@ namespace BookMark.Client.Controllers {
 				DateTime = datetime,
 				Info = info,
 				// Organization = org,
-				// OrganizationID = org.OrganizationID
+
+				// FIXME:
+				OrganizationID = org.OrganizationID
 			};
 			long EventID = ev.EventID;
 			string serial = JsonConvert.SerializeObject(ev);

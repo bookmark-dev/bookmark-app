@@ -130,7 +130,7 @@ namespace BookMark.Client.Controllers {
 			long result = task_long.Result;
 			if (result != 0L) {
 				// TODO: Change redirect to go Confirmation/Event page?
-				Task<Event> event_task = GetEvent(id);
+				Task<Event> event_task = GetEvent(result);
 				event_task.Wait();
 				Event ev = event_task.Result;
 				return View("Confirmation", new EventViewModel(ev));

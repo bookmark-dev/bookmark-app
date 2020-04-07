@@ -65,13 +65,13 @@ namespace BookMark.Client.Controllers {
 			  ev_task.Wait();
 			  List<Event> events = ev_task.Result;	
 
-        return View(new CreateEVMList(events));
+        return View(CreateEVMList(events));
 			} else if (org != null) 
 			{
 				Task<List<Event>> ev_task = SearchEventByEmail(org.Email);
         List<Event> events = ev_task.Result;	
 
-				return View(new CreateEVMList(events));
+				return View(CreateEVMList(events));
 			}
 			return Redirect("/home/index");
 		}

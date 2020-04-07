@@ -11,7 +11,7 @@ export class HttpService {
   constructor(private _http: HttpClient) {
     this._url = env['RestApiUrl'];
     if (this._url == undefined) {
-      this._url = 'https://localhost:5001';
+      this._url = 'http://localhost:5000';
     }
   }
   getUser(id: string) {
@@ -19,6 +19,7 @@ export class HttpService {
   }
   getUserFromName(name: string) {
     return this._http.get(`${this._url}/api/user/name/${name}`);
+    // return this._http.jsonp(`${this._url}/api/user/name/${name}`, 'react');
   }
   postUser(name: string, password: string) {
     return this._http.post(`${this._url}/api/user`, 

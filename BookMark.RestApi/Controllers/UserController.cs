@@ -7,7 +7,7 @@ using BookMark.RestApi.Services;
 
 namespace BookMark.RestApi.Controllers {
 	[ApiController]
-	[EnableCors()]
+	[EnableCors("CorsPolicy")]
 	public class UserController : ControllerBase {
 		private OrmService _srv;
 		public UserController(OrmService srv) {

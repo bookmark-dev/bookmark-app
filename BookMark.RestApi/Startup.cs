@@ -17,7 +17,7 @@ using BookMark.RestApi.Services;
 
 namespace BookMark.RestApi {
     public class Startup {
-        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+        readonly string MyAllowSpecificOrigins = "CorsPolicy";
         public Startup(IConfiguration configuration) {
             Configuration = configuration;
         }
@@ -28,9 +28,12 @@ namespace BookMark.RestApi {
                 options.AddPolicy(
                     MyAllowSpecificOrigins,
                     builder => {
+                        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                    });
+                    /*builder => {
                         builder.SetIsOriginAllowedToAllowWildcardSubdomains();
                         builder.SetIsOriginAllowed(s => s.Length > 0);
-                    });
+                    });*/
             });
             services.AddControllers();
             services.AddDbContext<BookMarkDbContext>(options => {
@@ -47,9 +50,9 @@ namespace BookMark.RestApi {
             if (env.IsDevelopment()) {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseHttpsRedirection();
             app.UseRouting();
-            app.UseCors(MyAllowSpecificOrigins);
             app.UseAuthorization();
             app.UseEndpoints(endpoints => {
                 endpoints.MapControllers();

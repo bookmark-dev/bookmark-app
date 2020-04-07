@@ -2,7 +2,7 @@
 
 @if (@Model != null)
 {
-  <h1>@Model.Name</h1>
+  <h1>Confirmation: RSVP Confimred!</h1>
 
   <p>Event Name: @Model.Name</p>
 
@@ -16,15 +16,10 @@
   <p>Event Location: @Model.Location</p>
   
   <p>Event Information: @Model.Info</p>
-
-  @if(@Model.UserEvents != null)
-  {
-    <p>RSVPs: @Model.UserEvents.Count()</p>
-  }
 }
 else
 {
   <p>Error</p>
 }
 <br/><br/>
-@Html.ActionLink("Back", "Back")
+<a href="/user/index">Done</a>

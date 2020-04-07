@@ -65,11 +65,14 @@ namespace BookMark.RestApi.Controllers {
 		public IActionResult Put(User model) {
 			if (ModelState.IsValid) {
 				if (_srv.CheckUserExists(model.Name)) {
-					User user = new User() {
-						Name = model.Name,
-						Password = model.Password
-					};
-					if (_srv.PutUser(user)) {
+					User UpdatedUser = model;
+					// User user = new User() {
+					// 	Name = model.Name,
+					// 	Password = model.Password,
+					// 	UserEvents = model.UserEvents,
+					// 	UserID = model.UserID
+					// };
+					if (_srv.PutUser(UpdatedUser)) {
 						return Ok();
 					}
 					return BadRequest("Putting user failed!");

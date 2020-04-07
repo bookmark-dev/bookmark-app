@@ -15,7 +15,7 @@
     {
       <tr>
         <td>@ev.DateTime</td>
-        <td>@ev.Name</td>
+        <td>@Html.ActionLink(@ev.Name, "Detail", new { id = ev.EventID }) </td>
       </tr>
     }
     </table>

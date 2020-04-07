@@ -1,0 +1,20 @@
+@model BookMark.Client.Models.EventViewModel
+
+@if (@ModelBinderAttribute != null)
+{
+  <h1>Confirmation: Event Created!</h1>
+
+  <p>Event Name: @Model.Name</p>
+
+  <p>Event Date and Time: @Model.DateTime</p>
+
+  <p>Event Location: @Model.Location</p>
+  
+  <p>Event Information: @Model.Info</p>
+}
+else
+{
+  <p>Error</p>
+}
+
+<a href="/organization/index">Done</a>

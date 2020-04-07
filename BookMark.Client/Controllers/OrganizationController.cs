@@ -1,4 +1,4 @@
-// TODO: switch login using email
+
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
@@ -74,6 +74,9 @@ namespace BookMark.Client.Controllers {
 			if (!ModelState.IsValid) {
 				return View(ovm);
 			}
+			ovm.Email = ovm.Email.ToLower().Replace(" ","");
+			ovm.Password = ovm.Password.Replace(" ", "");
+
 			Task<Organization> task = FindOrgByEmail(ovm.Email);
 			task.Wait();
 			Organization org = task.Result;
@@ -98,6 +101,10 @@ namespace BookMark.Client.Controllers {
 			} else if (ovm.Name.Length == 0) {
 				return View(ovm);
 			}
+
+			ovm.Email=ovm.Email.ToLower().Replace(" ","");
+			ovm.Password = ovm.Password.Replace(" ","");
+			
 			Task<Organization> find_org = FindOrgByEmail(ovm.Email);
 			find_org.Wait();
 			Organization org = find_org.Result;

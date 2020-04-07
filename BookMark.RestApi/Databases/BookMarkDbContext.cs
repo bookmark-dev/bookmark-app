@@ -50,20 +50,20 @@ namespace BookMark.RestApi.Databases {
 			builder.Entity<Organization>().HasMany(o => o.Events).WithOne(e => e.Organization).HasForeignKey(e => e.OrganizationID);
 			// builder.Entity<Event>().HasOne(e => e.Organization).WithMany(o => o.Events).HasForeignKey(e => e.EventID);
 			
-			/* TODO:
-				Trim whitespaces from name, email, and passwords, when submitted for login and registration.
+			/* TODO:	for User:
+				Trim whitespaces from name, email, and passwords, when submitted for login and registration
 				Also, make string comparisons for name and email non-case sensitive. 
 			*/
 			
 			// Seed Data
 			User[] users = new User[] {
 				new User() { UserID = 1, Name = "synaodev", Password = BCrypt.Net.BCrypt.HashPassword("tylercadena") },
-				new User() { UserID = 2, Name = "Adrienne", Password = BCrypt.Net.BCrypt.HashPassword("Sparkman") }
+				new User() { UserID = 2, Name = "adrienne", Password = BCrypt.Net.BCrypt.HashPassword("Sparkman") }
 			};
 			builder.Entity<User>().HasData(users);
 			
 			Organization[] org = new Organization[] {
-				new Organization() { OrganizationID = 1, Email = "Revature@Mail.com", Name = "Revature", Password = BCrypt.Net.BCrypt.HashPassword("Revature") }
+				new Organization() { OrganizationID = 1, Email = "revature@mail.com", Name = "revature", Password = BCrypt.Net.BCrypt.HashPassword("Revature") }
 			};
 			builder.Entity<Organization>().HasData(org);
 		}

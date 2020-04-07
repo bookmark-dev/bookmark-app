@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using BookMark.Client.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace BookMark.Client.Controllers {
     public class HomeController : Controller {
@@ -19,6 +20,30 @@ namespace BookMark.Client.Controllers {
         public IActionResult Privacy() {
             return View();
         }
+
+        public IActionResult Logout() {
+            HttpContext.Session.SetString("AcctID", null);
+			HttpContext.Session.SetString("OrgID", null);
+            return Redirect("/home/index");
+        }
+
+        public IActionResult RelIndex() {
+            if (HttpContext.Session.GetString("AcctID")!=null && HttpContext.Session.GetString("OrgID")==null){
+                return Redirect("/user/index");
+            }
+            else if (HttpContext.Session.GetString("AcctID")==null && HttpContext.Session.GetString("OrgID")!=null){
+                return Redirect("/organization/index");
+            }
+            else if (HttpContext.Session.GetString("AcctID")==null && HttpContext.Session.GetString("OrgID")==null){
+                return Redirect("/home/index");
+            }
+            else {
+                return Redirect("/home/logout");
+            }
+
+        }
+
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error() {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });

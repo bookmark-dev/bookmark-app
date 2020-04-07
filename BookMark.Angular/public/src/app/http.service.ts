@@ -19,7 +19,6 @@ export class HttpService {
   }
   getUserFromName(name: string) {
     return this._http.get(`${this._url}/api/user/name/${name}`);
-    // return this._http.jsonp(`${this._url}/api/user/name/${name}`, 'react');
   }
   postUser(name: string, password: string) {
     return this._http.post(`${this._url}/api/user`, 

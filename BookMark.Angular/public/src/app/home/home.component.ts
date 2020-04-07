@@ -42,6 +42,7 @@ export class HomeComponent implements OnInit {
   loginUser() {
     this.messages = [];
     this._http.getUserFromName(this.uvm_login.Name).subscribe(user_data => {
+      console.log(user_data);
       if (!user_data.hasOwnProperty('password')) {
         this.uvm_login = AccountModel();
         this.messages = generateErrorMessages(user_data);
@@ -57,15 +58,14 @@ export class HomeComponent implements OnInit {
           }
         });
       }
-    });
+    }, (error) => console.log(error), () => console.log('Complete'));
     this.flash = this.messages.length > 0;
   }
   registerUser() {
     this.messages = [];
+    console.log(this.uvm_register);
     if (this.uvm_register.Name.length == 0) {
       this.messages.push('Name shouldn\'t be empty!');
-    } else if (this.uvm_register.Email.length == 0) {
-      this.messages.push('Email shouldn\'t be empty!');
     } else if (this.uvm_register.Password.length == 0) {
       this.messages.push('Password shouldn\'t be empty!'); 
     } else {

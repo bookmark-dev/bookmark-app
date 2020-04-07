@@ -5,13 +5,15 @@
 </div>
 <p>Login:</p>
 <form (submit)="loginUser()">
+	<label>Name: </label>
 	<input type="text" [(ngModel)]="uvm_login.Name" [ngModelOptions]="{standalone: true}">
-	<input type="text" [(ngModel)]="uvm_login.Password" [ngModelOptions]="{standalone: true}">
+	<label>Password: </label>
+	<input type="password" [(ngModel)]="uvm_login.Password" [ngModelOptions]="{standalone: true}">
 	<input type="submit" value="Login!">
 </form>
 <p>Register:</p>
 <form (submit)="registerUser()">
 	<input type="text" [(ngModel)]="uvm_register.Name" [ngModelOptions]="{standalone: true}">
-	<input type="text" [(ngModel)]="uvm_register.Password" [ngModelOptions]="{standalone: true}">
+	<input type="password" [(ngModel)]="uvm_register.Password" [ngModelOptions]="{standalone: true}">
 	<input type="submit" value="Register!">
 </form>

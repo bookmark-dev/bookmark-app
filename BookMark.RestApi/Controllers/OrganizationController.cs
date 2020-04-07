@@ -79,7 +79,8 @@ namespace BookMark.RestApi.Controllers {
 			if (ModelState.IsValid) {
 				if (_srv.CheckOrgExists(model.Name)) {
 					Organization org = new Organization() 
-          			{
+          {
+						OrganizationID = model.OrganizationID,
 						Name = model.Name,
 						Password = model.Password
 					};

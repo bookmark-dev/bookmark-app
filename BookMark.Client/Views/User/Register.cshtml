@@ -5,11 +5,11 @@
 <form action="/user/register" method="POST">
 	@Html.AntiForgeryToken()
 	<label asp-for="@Model.Name">Username</label>
-	<input type="text" asp-for="@Model.Name">
+	<input type="text" asp-for="@Model.Name" placeholder = "Username">
 	@Html.ValidationMessageFor(uvm => uvm.Name)
 
 	<label asp-for="@Model.Password">Password</label>
-	<input type="password" asp-for="@Model.Password">
+	<input type="password" asp-for="@Model.Password" placeholder = "Password">
 	@Html.ValidationMessageFor(uvm => uvm.Password)
   
 	<button type="submit">Register</button>

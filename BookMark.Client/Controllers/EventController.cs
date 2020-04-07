@@ -46,8 +46,8 @@ namespace BookMark.Client.Controllers {
 			}
 			return await response.Content.ReadAsAsync<User>();
 		}
-    	// Shows the events for current user/org
-			// TODO: Seperate for USER and ORG
+    
+		// Shows the events that user can rsvp
     [HttpGet]
 		public IActionResult Index() 
 		{
@@ -67,6 +67,43 @@ namespace BookMark.Client.Controllers {
 
         return View(CreateEVMList(events));
 			} else if (org != null) 
+			{
+				Task<List<Event>> ev_task = SearchEventByEmail(org.Email);
+        List<Event> events = ev_task.Result;	
+
+				return View(CreateEVMList(events));
+			}
+			return Redirect("/home/index");
+		}
+
+		[HttpGet]
+		public IActionResult UserEvents() 
+		{
+      Task<User> user_task = GetCurrentUser();
+			user_task.Wait();
+			User user = user_task.Result;
+      // Get all Events for Current User
+      if (user != null) 
+			{
+        // TODO: update if we update login to user email
+				Task<List<Event>> ev_task = FindUserEvents(user.Name);
+			  ev_task.Wait();
+			  List<Event> events = ev_task.Result;	
+
+        return View(CreateEVMList(events));
+			}
+			return Redirect("/home/index");
+		}
+
+		[HttpGet]
+		public IActionResult OrgEvents() 
+		{
+			Task<Organization> org_task = GetCurrentOrg();
+			org_task.Wait();
+			Organization org = org_task.Result;
+
+      // Get all Events for Current Org
+			if (org != null) 
 			{
 				Task<List<Event>> ev_task = SearchEventByEmail(org.Email);
         List<Event> events = ev_task.Result;	
@@ -116,10 +153,11 @@ namespace BookMark.Client.Controllers {
 			}
 			return await response.Content.ReadAsAsync<List<Event>>();
 		}
-    	[HttpGet]
+    [HttpGet]
 		public IActionResult Create() {
 			return View(new EventViewModel());
 		}
+
 		[HttpPost]
 		public IActionResult Create(EventViewModel model) {
 			if (!ModelState.IsValid) {

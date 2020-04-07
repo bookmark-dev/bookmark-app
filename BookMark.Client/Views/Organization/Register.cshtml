@@ -7,16 +7,16 @@
 <form action="/organization/register" method="POST">
 	@Html.AntiForgeryToken()
 	<label asp-for="@Model.Name">Name</label>
-	<input type="text" asp-for="@Model.Name">
+	<input type="text" asp-for="@Model.Name" placeholder = "Organization Name">
 	@Html.ValidationMessageFor(ovm => ovm.Name)
   <br />
   @Html.AntiForgeryToken()
 	<label asp-for="@Model.Email">Email</label>
-	<input type="text" asp-for="@Model.Email">
+	<input type="text" asp-for="@Model.Email" placeholder = "Email">
 	@Html.ValidationMessageFor(ovm => ovm.Email)
   <br/>
 	<label asp-for="@Model.Password">Password</label>
-	<input type="password" asp-for="@Model.Password">
+	<input type="password" asp-for="@Model.Password" placeholder = "Password">
 	@Html.ValidationMessageFor(ovm => ovm.Password)
   <br/>
 	<button type="submit">Register</button>

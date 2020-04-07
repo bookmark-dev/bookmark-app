@@ -56,34 +56,32 @@ namespace BookMark.RestApi.Controllers
 			}
 			return Ok(events);
 		}
-
 		[HttpPost("/api/event")]
-		public IActionResult Post(Event model) 
-    {
-			if (ModelState.IsValid) 
-      {
-        Event ev = new Event() 
-        {
-          Name = model.Name,
-          DateTime = model.DateTime,
-          Location = model.Location,
-          Info = model.Info,
-          IsPublic = model.IsPublic,
-          OrganizationID = model.OrganizationID,
-          // FIXME: Set Organization?
-          Organization = _srv.GetOrg(model.OrganizationID)
-        };
-
-        if (_srv.PostEvent(ev)) 
-        {
-          // FIXME: return ev for confirmation page or nothing?
-          return Ok(ev);
-        }
-					return BadRequest("Creating event failed!");
+		public IActionResult Post(Event model) {
+			if (ModelState.IsValid) {
+				/*Event ev = new Event() {
+					EventID = model.EventID,
+					Name = model.Name,
+					DateTime = model.DateTime,
+					Location = model.Location,
+					Info = model.Info,
+					IsPublic = model.IsPublic,
+					OrganizationID = model.OrganizationID,
+					// Organization = _srv.GetOrg(model.OrganizationID)
+				};*/
+				//Organization org = _srv.GetOrg(model.OrganizationID);
+				//org.Events.Add(model);
+				System.Console.WriteLine(model);
+				Organization org = _srv.GetOrg(model.OrganizationID);
+				System.Console.Write(org);
+				if (_srv.PostEvent(model)) {
+					// FIXME: return ev for confirmation page or nothing?
+					return Ok(model);
+				}
+				return BadRequest("Creating event failed!");
 			}
 			return BadRequest("Event model is invalid!");
 		}
-
 		[HttpPut("/api/event")]
 		public IActionResult Put(Event model) 
 		{

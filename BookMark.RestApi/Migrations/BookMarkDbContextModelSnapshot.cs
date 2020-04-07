@@ -37,6 +37,8 @@ namespace BookMark.RestApi.Migrations
 
                     b.HasIndex("AppointmentGroupID");
 
+                    b.HasIndex("UserID");
+
                     b.ToTable("Appointments");
                 });
 
@@ -92,6 +94,8 @@ namespace BookMark.RestApi.Migrations
 
                     b.HasKey("EventID");
 
+                    b.HasIndex("OrganizationID");
+
                     b.ToTable("Events");
                 });
 
@@ -116,10 +120,10 @@ namespace BookMark.RestApi.Migrations
                     b.HasData(
                         new
                         {
-                            OrganizationID = 637217889481259457L,
+                            OrganizationID = 1L,
                             Email = "Revature@Mail.com",
                             Name = "Revature",
-                            Password = "$2a$11$zIi.pmS/ajWJYGgcXlK.4ebCoyxwDw15XWJv2j6FSEL6.IR9NcU56"
+                            Password = "$2a$11$H.Sh12upMvTDIaE5k3w/pu3IfMllA90gaOefks7KmZWWVtRXs27Da"
                         });
                 });
 
@@ -146,13 +150,13 @@ namespace BookMark.RestApi.Migrations
                         {
                             UserID = 1L,
                             Name = "synaodev",
-                            Password = "$2a$11$RO/C4HsZcEx.wSpk2TQxRe21eC3JvwgQxhgUHH9vdvIE6XUenZF7a"
+                            Password = "$2a$11$gdpxkMUHwW29iGaluiT6MObi4e/InJ5r/yPnUpu75t8Bkc1CNAZUS"
                         },
                         new
                         {
                             UserID = 2L,
                             Name = "Adrienne",
-                            Password = "$2a$11$A81w4peyljR3nUkL9xZrA.Ikl5lMry1G62QIs/M4Te.7mKvqerH4G"
+                            Password = "$2a$11$V6m0HDTkQuPy2315iMGNm.VrV9KykKI0qbE4S5V0DBI0riVntnjty"
                         });
                 });
 
@@ -182,7 +186,7 @@ namespace BookMark.RestApi.Migrations
 
                     b.HasOne("BookMark.RestApi.Models.User", "User")
                         .WithMany("Appointments")
-                        .HasForeignKey("AppointmentID")
+                        .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -200,7 +204,7 @@ namespace BookMark.RestApi.Migrations
                 {
                     b.HasOne("BookMark.RestApi.Models.Organization", "Organization")
                         .WithMany("Events")
-                        .HasForeignKey("EventID")
+                        .HasForeignKey("OrganizationID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

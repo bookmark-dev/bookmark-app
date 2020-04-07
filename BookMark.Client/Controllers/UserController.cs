@@ -95,6 +95,12 @@ namespace BookMark.Client.Controllers {
 			if (!ModelState.IsValid) {
 				return View(uvm);
 			}
+			// FIXME: 
+			uvm.Password = uvm.Password.Replace(" ","");
+			if (uvm.Name.Length == 0 || uvm.Password.Length < 6)
+			{
+
+			}
 			Task<User> find_user = FindUserByName(uvm.Name);
 			find_user.Wait();
 			User user = find_user.Result;

@@ -15,7 +15,7 @@
     {
       <tr>
         <td>@ev.DateTime</td>
-        <td>@Html.ActionLink(@ev.Name, "RSVP", new { id = ev.EventID }) </td>
+        <td>@Html.ActionLink(@ev.Name, "Detail", new { id = ev.EventID }) </td>
       </tr>
     }
     </table>
@@ -24,6 +24,8 @@
   {
     <p>"No Events"</p>
   }
+
+  <a href="/user/index">Back</a>
 }
 else
 {

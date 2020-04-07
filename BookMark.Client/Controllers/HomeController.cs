@@ -22,8 +22,8 @@ namespace BookMark.Client.Controllers {
         }
 
         public IActionResult Logout() {
-            HttpContext.Session.SetString("AcctID", null);
-			HttpContext.Session.SetString("OrgID", null);
+            HttpContext.Session.SetString("AcctID", "");
+			HttpContext.Session.SetString("OrgID", "");
             return Redirect("/home/index");
         }
 

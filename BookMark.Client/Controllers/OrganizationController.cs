@@ -55,6 +55,35 @@ namespace BookMark.Client.Controllers {
 			}
 			return OrgID;
 		}
+		
+		private async Task<long> UpdateOrg(string name, string email, string password) {
+			string org_id = HttpContext.Session.GetString("OrgID");
+			if (org_id == null || org_id.Length == 0) {
+				return 0;
+			}
+			long ID = 0;
+			if (!long.TryParse(org_id, out ID)) {
+				return 0;
+			}
+			Organization org = new Organization() {
+				Name = name,
+        Email = email,
+				Password = password,
+				OrganizationID = ID
+			};
+			long OrgID = org.OrganizationID;
+			HttpContent content = new StringContent(
+				JsonConvert.SerializeObject(org),
+				Encoding.UTF8,
+				"application/json"
+			);
+			HttpResponseMessage response = await _service.client.PutAsync("/api/org", content);
+			if (!response.IsSuccessStatusCode) {
+				return 0;
+			}
+			return OrgID;
+		}
+		
 		[HttpGet]
 		public IActionResult Index() {
 			Task<Organization> org_task = GetCurrentOrg();
@@ -75,7 +104,7 @@ namespace BookMark.Client.Controllers {
 				return View(ovm);
 			}
 			ovm.Email = ovm.Email.ToLower().Replace(" ","");
-			ovm.Password = ovm.Password.Replace(" ", "");
+			ovm.Password = ovm.Password.Replace(" ", ""); //FIXME: ???
 
 			Task<Organization> task = FindOrgByEmail(ovm.Email);
 			task.Wait();
@@ -98,12 +127,14 @@ namespace BookMark.Client.Controllers {
 			ViewData["RegErr"] = "";
 			if (!ModelState.IsValid) {
 				return View(ovm);
-			} else if (ovm.Name.Length == 0) {
+			} 
+			ovm.Email=ovm.Email.ToLower().Replace(" ","");
+			// FIXME: 
+			ovm.Password = ovm.Password.Replace(" ","");
+			if (ovm.Name.Length == 0 || ovm.Password.Length < 6) {
 				return View(ovm);
 			}
 
-			ovm.Email=ovm.Email.ToLower().Replace(" ","");
-			ovm.Password = ovm.Password.Replace(" ","");
 			
 			Task<Organization> find_org = FindOrgByEmail(ovm.Email);
 			find_org.Wait();
@@ -120,6 +151,49 @@ namespace BookMark.Client.Controllers {
 				return View(ovm);
 			}
 			HttpContext.Session.SetString("OrgID", ID.ToString());
+			return Redirect("/organization/index");
+		}
+
+		[HttpGet]
+		public IActionResult UpdateInfo()
+		{
+			return View();
+		}
+
+		[HttpPut]
+		public IActionResult UpdateInfo(OrganizationViewModel ovm)
+		{
+			ViewData["RegErr"] = "";
+			
+			if (!ModelState.IsValid) {
+				return View(ovm);
+			} 
+			ovm.Email=ovm.Email.ToLower().Replace(" ","");
+			ovm.Password = ovm.Password.Replace(" ","");	//FIXME: ???
+			if (ovm.Name.Length == 0 || ovm.Password.Length < 6) {
+				return View(ovm);
+			}
+
+			Task<Organization> find_org = FindOrgByEmail(ovm.Email);
+			find_org.Wait();
+			Organization org = find_org.Result;
+			if (org != null ) {
+				long tempID;
+				if (!long.TryParse(HttpContext.Session.GetString("OrgID"), out tempID)) {
+					return null;
+				}
+				if (org.OrganizationID!=tempID){
+					ViewData["RegErr"] = "Email is already taken!";
+					return View(ovm);
+				}
+			}
+			Task<long> find_id = UpdateOrg(ovm.Name, ovm.Email, ovm.Password);
+			find_id.Wait();
+			long ID = find_id.Result;
+			if (ID == 0) {
+				ViewData["RegErr"] = "Registration unsuccessful!";
+				return View(ovm);
+			}
 			return Redirect("/organization/index");
 		}
 	}

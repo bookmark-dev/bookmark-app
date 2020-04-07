@@ -1,0 +1,26 @@
+@model BookMark.Client.Models.OrganizationViewModel
+
+<h1>Change your information</h1>
+
+<p>@ViewData["RegErr"]</p>
+
+<form action="/organization/updateinfo" method="PUT">
+	@Html.AntiForgeryToken()
+	<label asp-for="@Model.Name">Name</label>
+	<input type="text" asp-for="@Model.Name">
+	@Html.ValidationMessageFor(ovm => ovm.Name)
+  <br />
+
+  @Html.AntiForgeryToken()
+	<label asp-for="@Model.Email">Email</label>
+	<input type="text" asp-for="@Model.Email">
+	@Html.ValidationMessageFor(ovm => ovm.Email)
+  <br/>
+	
+  <label asp-for="@Model.Password">New Password</label>
+	<input type="password" asp-for="@Model.Password">
+	@Html.ValidationMessageFor(ovm => ovm.Password)
+  <br/>
+	
+  <button type="submit">Register</button>
+</form>

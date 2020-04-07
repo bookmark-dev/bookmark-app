@@ -14,9 +14,9 @@ namespace BookMark.RestApi.Repositories
     {
 			DbSet<Event> table = _ctx.Set<Event>();
 			return table
-				.Include(e => e.Organization)
-				.Include(e => e.UserEvents)
-				.ThenInclude(ue => ue.User)
+				// .Include(e => e.Organization)
+				// .Include(e => e.UserEvents)
+				// .ThenInclude(ue => ue.User)
 				.ToList();
 		}
 		public override Event Get(long ID) 
@@ -24,9 +24,9 @@ namespace BookMark.RestApi.Repositories
 			DbSet<Event> table = _ctx.Set<Event>();
       
 		  return table
-        .Include(e => e.Organization)
-        .Include(e => e.UserEvents)
-        .ThenInclude(ue => ue.User)
+        // .Include(e => e.Organization)
+        // .Include(e => e.UserEvents)
+        // .ThenInclude(ue => ue.User)
         .SingleOrDefault(e => e.EventID == ID);
 		}
     public override bool Post(Event ev) 
@@ -49,10 +49,10 @@ namespace BookMark.RestApi.Repositories
 		public List<Event> SearchByName(string name) 
     {
 			DbSet<Event> table = _ctx.Set<Event>();
-			IQueryable<Event> query = table.Where(e => e.Name.Contains(name))
-				.Include(e => e.Organization)
-				.Include(e => e.UserEvents)
-				.ThenInclude(ue => ue.User);
+			IQueryable<Event> query = table.Where(e => e.Name.Contains(name));
+				// .Include(e => e.Organization)
+				// .Include(e => e.UserEvents)
+				// .ThenInclude(ue => ue.User);
 			if (query.Count() == 0) {
 				return null;
 			}
@@ -62,10 +62,10 @@ namespace BookMark.RestApi.Repositories
 		// TODO: update when update user email
 		public List<Event> FindByUser(string name) {
 			DbSet<Event> table = _ctx.Set<Event>();
-			IQueryable<Event> query = table.Where(e => e.UserEvents.Any(ue => ue.User.Name.Equals(name)))
-				.Include(e => e.Organization)
-				.Include(e => e.UserEvents)
-				.ThenInclude(ue => ue.User);
+			IQueryable<Event> query = table.Where(e => e.UserEvents.Any(ue => ue.User.Name.Equals(name)));
+				// .Include(e => e.Organization)
+				// .Include(e => e.UserEvents)
+				// .ThenInclude(ue => ue.User);
 			if (query.Count() == 0) {
 				return null;
 			}
@@ -74,10 +74,10 @@ namespace BookMark.RestApi.Repositories
 		public List<Event> FindByOrg(string email) 
     {
 			DbSet<Event> table = _ctx.Set<Event>();
-			IQueryable<Event> query = table.Where(e => e.Organization.Email.Equals(email))
-				.Include(e => e.Organization)
-				.Include(e => e.UserEvents)
-				.ThenInclude(ue => ue.User);
+			IQueryable<Event> query = table.Where(e => e.Organization.Email.Equals(email));
+				// .Include(e => e.Organization)
+				// .Include(e => e.UserEvents)
+				// .ThenInclude(ue => ue.User);
 			if (query.Count() == 0) {
 				return null;
 			}

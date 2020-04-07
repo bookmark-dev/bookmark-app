@@ -376,10 +376,10 @@ namespace BookMark.Client.Controllers {
 			return View(new EventViewModel(ev));
 		}
 		// FIXME: PASS ID AS LONG?
-		private async Task<Event> GetEvent(long id) 
+		private async Task<Event> GetEvent(long idlong) 
 		{
-			string idstring = id.ToString();
-			HttpResponseMessage response = await _service.client.GetAsync($"/api/event/{idstring}");
+			string id = idlong.ToString();
+			HttpResponseMessage response = await _service.client.GetAsync($"/api/event/{id}");
 			if (!response.IsSuccessStatusCode) {
 				return null;
 			}

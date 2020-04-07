@@ -108,7 +108,7 @@ namespace BookMark.RestApi.Controllers
 
 		[HttpDelete("/api/event/{id}")]
 		public IActionResult Delete(string id) 
-    {
+    	{
 			long ID = 0;
 			if (long.TryParse(id, out ID)) {
 				Event ev = _srv.GetEvent(ID);

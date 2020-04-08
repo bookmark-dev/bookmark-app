@@ -14,5 +14,12 @@ namespace BookMark.RestApi.Models {
 		public UserEvent() {
 			UserEventID = DateTime.Now.Ticks;
 		}
+
+		public UserEvent(long id, User user, Event ev)
+		{
+			UserEventID = id;
+			User = user;
+			Event = ev;
+		}
 	}
 }

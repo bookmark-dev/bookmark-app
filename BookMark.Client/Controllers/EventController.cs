@@ -54,7 +54,7 @@ namespace BookMark.Client.Controllers {
 			}
 			return await response.Content.ReadAsAsync<List<Event>>();
 		}
-
+		/*
 		private async Task<bool> CreateNewUserEvent(User user, Event ev)
 		{
 			HttpContent contentuser = new StringContent(
@@ -77,6 +77,31 @@ namespace BookMark.Client.Controllers {
 			}
 			return true;
 		}
+		*/
+
+		private async Task<bool> CreateNewUserEvent(long userid, long evid) {
+			UserEvent ue = new UserEvent() {
+				UserID = userid,
+				EventID = evid
+			};
+
+			string serial = JsonConvert.SerializeObject(ue);
+			System.Console.WriteLine(serial);
+			HttpContent content = new StringContent(
+				serial,
+				Encoding.UTF8,
+				"application/json"
+			);
+			HttpResponseMessage response = await _service.client.PostAsync("/api/event/userevent", content);
+			//TODO: ?
+
+			if (!response.IsSuccessStatusCode) {
+				return false;
+			}
+			return true;
+		}
+
+
     
 		private List<Event> GetEventsNotJoined() 
 		{
@@ -157,9 +182,7 @@ namespace BookMark.Client.Controllers {
 				Task<Event> event_task = GetEvent(id);
 				event_task.Wait();
 				Event ev = event_task.Result;
-
-
-
+        /*
 				if (user.UserEvents == null)
 				{
 					user.UserEvents = new List<UserEvent>();
@@ -177,23 +200,18 @@ namespace BookMark.Client.Controllers {
 					EventID = ev.EventID
 				});
 				Task<bool> a = CreateNewUserEvent(user, ev);
-				//TODO: Call the User Put and Event Put methods like this
-
-				// 	UserEvent userevent = new UserEvent()
-				// {
-				// 	User = user,
-				// 	UserID = user.UserID,
-				// 	EventID = ev.EventID,
-				// 	Event = ev
-				// }; 
-
-				// //this posts to userevent: not fully implemented
-				// Task<long> find_id = CreateNewUserEvent(userevent.User, userevent.UserID, userevent.Event, userevent.EventID);
-				// find_id.Wait();
-				// long ID = find_id.Result;
-				// //if ID==0, it was unsuccessful, add a check and error message
-
-				return View(new EventViewModel(ev));
+				*/
+				Task<bool> post = CreateNewUserEvent(user.UserID, ev.EventID);
+				post.Wait();
+				// TODO: Test
+				if (post.Result)
+				{
+					return View(new EventViewModel(ev));
+				}
+				else 
+				{
+					return View("RSVP", new EventViewModel(ev));
+				}
 			}
 			return Redirect("/home/index");
 		}

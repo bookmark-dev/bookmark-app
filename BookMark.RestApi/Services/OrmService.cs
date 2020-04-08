@@ -142,5 +142,11 @@ namespace BookMark.RestApi.Services {
 		{
 			return _er.FindByOrg(email);
 		}
+
+		public bool PostUserEvent(UserEvent userevent)
+		{
+			return _er.UserEventPost(userevent);
+		}
+
 	}
 }

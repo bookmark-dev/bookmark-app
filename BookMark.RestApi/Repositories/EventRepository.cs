@@ -84,5 +84,11 @@ namespace BookMark.RestApi.Repositories
 			return query.ToList();
 		}
     
+		public bool UserEventPost(UserEvent ue) 
+    {
+			DbSet<UserEvent> table = _ctx.Set<UserEvent>();
+			table.Add(ue);
+			return _ctx.SaveChanges() >= 1;
+		}
 	}
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Cors;
 using BookMark.RestApi.Models;
@@ -160,5 +161,30 @@ namespace BookMark.RestApi.Controllers
 			}
 			return Ok(events);
 		}
+
+		// TODO: MAKE AND USE THE TASK IN CLIENT
+		[HttpPost("/api/event/userevent/")]
+		public IActionResult UserEventPut(UserEvent model) 
+    {
+			if (ModelState.IsValid) 
+			{
+				if (model.EventID != 0L && model.UserID != 0L) 
+				{	
+					Event ev = _srv.GetEvent(model.EventID);
+					User user =_srv.GetUser(model.UserID);
+
+					UserEvent post = new UserEvent(model.UserEventID, user, ev);
+
+					if (_srv.PostUserEvent(post)) 
+					{
+						return Ok();
+					}
+					return BadRequest("Putting event failed!");
+				}
+				return NotFound($"Couldn't find event with id: \"{model.EventID}\"!");
+			}
+			return BadRequest("Event model is invalid!");
+		}
+
 	}
 }

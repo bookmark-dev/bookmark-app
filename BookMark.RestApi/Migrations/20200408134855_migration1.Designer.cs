@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BookMark.RestApi.Migrations
 {
     [DbContext(typeof(BookMarkDbContext))]
-    [Migration("20200407090818_migration1")]
+    [Migration("20200408134855_migration1")]
     partial class migration1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -125,7 +125,7 @@ namespace BookMark.RestApi.Migrations
                             OrganizationID = 1L,
                             Email = "revature@mail.com",
                             Name = "revature",
-                            Password = "$2a$11$DR63GSNJooZlE3EHIe40OOyvSqb2EnSRgnMUVVp9TnOqITUbBY7VG"
+                            Password = "$2a$11$M4FbYKOWutDTetWq0sb3muCuxNLtHiHVRDrKwccUFKuoXp6rcauC2"
                         });
                 });
 
@@ -153,29 +153,31 @@ namespace BookMark.RestApi.Migrations
                             UserID = 1L,
                             Email = "tylercadena@alum.calarts.edu",
                             Name = "synaodev",
-                            Password = "$2a$11$BZFLFLGM.jm213yXKI6NT.Bv3m4ti1VkaSiG/5RKR0JFXVpGUE/Um"
+                            Password = "$2a$11$5XyOwltQZ/vOYCDLcYJWcePnN50iE2C/Ff1l4gzKCysve/WB23lKK"
                         },
                         new
                         {
                             UserID = 2L,
                             Email = "adrienne-sparkman@gmail.com",
                             Name = "adrienne",
-                            Password = "$2a$11$FdMGlzdyHiKCjeoVO/4ZnesWyvOfHgktffZSwHx4I//eZLNWfXhH."
+                            Password = "$2a$11$W9WfqW.4rkW3CAJ4ymJn.O/gZYW/rdUVWeBk9DLfBPcOU29f2gca."
                         });
                 });
 
             modelBuilder.Entity("BookMark.RestApi.Models.UserEvent", b =>
                 {
-                    b.Property<long>("UserEventID")
+                    b.Property<long>("UserID")
                         .HasColumnType("bigint");
 
                     b.Property<long>("EventID")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("UserID")
+                    b.Property<long>("UserEventID")
                         .HasColumnType("bigint");
 
-                    b.HasKey("UserEventID");
+                    b.HasKey("UserID", "EventID");
+
+                    b.HasIndex("EventID");
 
                     b.ToTable("UserEvents");
                 });
@@ -217,13 +219,13 @@ namespace BookMark.RestApi.Migrations
                 {
                     b.HasOne("BookMark.RestApi.Models.Event", "Event")
                         .WithMany("UserEvents")
-                        .HasForeignKey("UserEventID")
+                        .HasForeignKey("EventID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("BookMark.RestApi.Models.User", "User")
                         .WithMany("UserEvents")
-                        .HasForeignKey("UserEventID")
+                        .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

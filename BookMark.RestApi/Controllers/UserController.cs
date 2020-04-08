@@ -44,6 +44,10 @@ namespace BookMark.RestApi.Controllers {
 			}
 			return Ok(user);
 		}
+		[HttpGet("/api/user/events")]
+		public IActionResult GetEvents() {
+			return Ok(_srv.GetUserEvents());
+		}
 		[HttpPost("/api/user")]
 		public IActionResult Post(User model) {
 			if (ModelState.IsValid) {

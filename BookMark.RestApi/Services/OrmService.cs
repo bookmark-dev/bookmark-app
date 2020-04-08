@@ -148,5 +148,8 @@ namespace BookMark.RestApi.Services {
 			return _er.UserEventPost(userevent);
 		}
 
+		public List<UserEvent> GetUserEvents() {
+			return _ur.GetUserEvents();
+		}
 	}
 }

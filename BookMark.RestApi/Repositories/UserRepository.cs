@@ -52,5 +52,9 @@ namespace BookMark.RestApi.Repositories {
 			}
 			return false;
 		}
+		public List<UserEvent> GetUserEvents() {
+			DbSet<UserEvent> table = _ctx.Set<UserEvent>();
+			return table.ToList();
+		}
 	}
 }

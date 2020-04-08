@@ -48,11 +48,18 @@ namespace BookMark.Client.Controllers {
 		}
 
 		private async Task<List<Event>> GetAllEvents() {
-			HttpResponseMessage response = await _service.client.GetAsync($"/api/event/get");
+			HttpResponseMessage response = await _service.client.GetAsync($"/api/event");
 			if (!response.IsSuccessStatusCode) {
 				return null;
 			}
 			return await response.Content.ReadAsAsync<List<Event>>();
+		}
+		private async Task<List<UserEvent>> GetUserEvents() {
+			HttpResponseMessage response = await _service.client.GetAsync("/api/user/events");
+			if (!response.IsSuccessStatusCode) {
+				return null;
+			}
+			return await response.Content.ReadAsAsync<List<UserEvent>>();
 		}
 		/*
 		private async Task<bool> CreateNewUserEvent(User user, Event ev)
@@ -108,28 +115,57 @@ namespace BookMark.Client.Controllers {
 			Task<User> user_task = GetCurrentUser();
 			user_task.Wait();
 			User user = user_task.Result;
-			
-			Task<List<Event>> events_task = GetAllEvents();
-			events_task.Wait();
-			List<Event> eventlist = events_task.Result;
 
-			if (eventlist != null)
-			{
-				if (eventlist.Count > 0)
-				{
-					foreach (Event e in eventlist)
-					{
-						foreach (UserEvent ue in e.UserEvents){
-							if(user.UserID == ue.User.UserID)
-							{
-								eventlist.Remove(e);
-							}
-						}
-					}
-				}
-				else return new List<Event>();
+			Task<List<Event>> event_task = GetAllEvents();
+			event_task.Wait();
+			List<Event> event_list = event_task.Result;
+
+			Task<List<UserEvent>> user_event_task = GetUserEvents();
+			user_event_task.Wait();
+			List<UserEvent> user_event_list = user_event_task.Result;
+
+			if (event_list == null) {
+				return new List<Event>();
 			}
-			return new List<Event>();
+			return event_list;
+
+			// if (event_list != null && user_event_list != null) {
+			// 	if (event_list.Count != 0) {
+			// 		foreach (Event e in event_list) {
+			// 			foreach (UserEvent ue in user_event_list) {
+			// 				if (ue.UserID == user.UserID && ue.EventID == e.EventID) {
+			// 					event_list.Remove(e);
+			// 				}
+			// 			}
+			// 		}
+			// 		return event_list;
+			// 	}
+			// 	return new List<Event>();
+			// }
+			// return new List<Event>();
+
+			// if (eventlist != null)
+			// {
+			// 	if (eventlist.Count > 0)
+			// 	{
+			// 		List<UserEvent> uelist = 
+
+			// 		foreach (Event e in eventlist)
+			// 		{
+			// 			if (e.UserEvents != null) {
+			// 				foreach (UserEvent ue in e.UserEvents) {
+			// 					if(user.UserID == ue.UserID)
+			// 					{
+			// 						eventlist.Remove(e);
+			// 					}
+			// 				}
+			// 			}			
+			// 		}
+			// 		return eventlist;
+			// 	}
+			// 	else return new List<Event>();
+			// }
+			// return new List<Event>();
 		}
 		// TODO: TEST: Shows the events that user can rsvp
     [HttpGet]

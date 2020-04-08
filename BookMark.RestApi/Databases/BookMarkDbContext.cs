@@ -25,16 +25,16 @@ namespace BookMark.RestApi.Databases {
 			builder.Entity<AppointmentGroup>().Property(ag => ag.AppointmentGroupID).ValueGeneratedNever();
 			builder.Entity<Event>().HasKey(e => e.EventID);
 			builder.Entity<Event>().Property(e => e.EventID).ValueGeneratedNever();
-			builder.Entity<UserEvent>().HasKey(ue => ue.UserEventID);
-			builder.Entity<UserEvent>().Property(ue => ue.UserEventID).ValueGeneratedNever();
+			builder.Entity<UserEvent>().HasKey(ue => new { ue.UserID, ue.EventID });
+			// builder.Entity<UserEvent>().Property(ue => ue.UserEventID).ValueGeneratedNever();
 
 			//For User, Appointment, UserAppointment, and AppointmentGroup
 			
 			builder.Entity<User>().HasMany(u => u.UserEvents).WithOne(ue => ue.User).HasForeignKey(ue => ue.UserID);
 			builder.Entity<Event>().HasMany(e => e.UserEvents).WithOne(ue => ue.Event).HasForeignKey(ue => ue.EventID);
 			
-			builder.Entity<UserEvent>().HasOne(ue => ue.User).WithMany(u => u.UserEvents).HasForeignKey(ue => ue.UserEventID);
-			builder.Entity<UserEvent>().HasOne(ue => ue.Event).WithMany(e => e.UserEvents).HasForeignKey(ue => ue.UserEventID);
+			builder.Entity<UserEvent>().HasOne(ue => ue.User).WithMany(u => u.UserEvents).HasForeignKey(ue => ue.UserID);
+			builder.Entity<UserEvent>().HasOne(ue => ue.Event).WithMany(e => e.UserEvents).HasForeignKey(ue => ue.EventID);
 
 			builder.Entity<User>().HasMany(u => u.Appointments).WithOne(a => a.User).HasForeignKey(a => a.UserID);
 			// builder.Entity<Appointment>().HasOne(a => a.User).WithMany(u => u.Appointments).HasForeignKey(a => a.AppointmentID);
